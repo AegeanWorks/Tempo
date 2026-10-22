@@ -1,0 +1,16 @@
+[
+  {
+    "schema": 1,
+    "surface": "web",
+    "baseline_commit": "1990fc1d5903ea42b8624997cfcaf8b0908c3d02",
+    "contract_hash": "ee4096b968fbf316a7e2271f12f7b40918b2937706484c6144a341603b8ae86d",
+    "started_at": 1792691624.7621102,
+    "finished_at": 1792691747.1012795,
+    "strikes": 0,
+    "reviewer": "Kilo agent (inventory proof + dogfood over HTTP; user declined reviewer credit)",
+    "allowed_removals": [],
+    "final_snapshot_digest": "99a1f5f7fede05210683c4253a554153e4c600e51b016beda62843b3a3c2121b",
+    "final_snapshot_entries": 34,
+    "surface_digest": "7885ac5b96cb079f87b6daef7c8e348228ea3ed64ac8fb4a19afa4c9b9c9e962"
+  }
+]
