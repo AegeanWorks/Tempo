@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "surfaces": {
+    "web": {
+      "paths": [
+        "web/**"
+      ]
+    }
+  },
+  "protected": [
+    "tests/**",
+    "tools/ui_inventory.py",
+    "tempo/**",
+    "run.py"
+  ],
+  "commands": {
+    "fast": "python -m unittest discover -s tests -t .",
+    "snapshot": "python tools/ui_inventory.py"
+  },
+  "style": {
+    "theme_paths": [
+      "web/theme.css"
+    ]
+  },
+  "limits": {
+    "max_files": 12,
+    "max_lines": 300
+  }
+}

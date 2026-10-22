@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "active_task": {
+    "task_id": "tempo-focus-timer-v1",
+    "last_phase": "phase 4",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1792691575.398482
+  },
+  "checkpoints": [
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/5] Plan: zero-dependency focus timer with a themed static UI under the aikit ui guard",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792688514.1902144,
+      "timestamp_str": "2026-10-22 20:01:54",
+      "impact_assessment": {
+        "why": "exercise the UI contract, snapshot and style gates on a fresh project with a real, reviewable UI surface",
+        "benefits": "a usable local focus timer; a worked example of a non-React zero-dependency UI contract with an inventory proof and theme tokens",
+        "risks": "contract: ui.json surface and protected paths must match the real tree or verify refuses every edit; dependency: stdlib only, no npm or test runner beyond unittest; concurrency: session store written from a single-threaded http.server, one writer at a time; state: sessions.json must survive power loss mid-write",
+        "mitigation": "scaffold the contract from the real tree after the UI exists; atomic temp+fsync+replace writes with a schema version and refusal on unknown versions; unit tests under 10ms with no spawns and integration tests under 350ms"
+      }
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[4/5] Domain, store, UI surface, server and README built; 30 tests pass, 4/4 project gates pass, app dogfooded over HTTP; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792689179.3809588,
+      "timestamp_str": "2026-10-22 20:12:59"
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[5/5] Dogfood runner added (19/19 steps, golden path + chaos), UI proofs probed with 7 hostile edits (all caught), ADR-001..003 recorded; 5/5 gates pass; checklists: passed; UI begin/verify/finish blocked: user withheld commit authorization",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792690085.5259528,
+      "timestamp_str": "2026-10-22 20:28:05"
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[5/5] Full UI guard lifecycle exercised in a disposable jail: 8/8 verify probes and 11/11 lifecycle probes as expected; ported the verified focus-ring edit, ignored bytecode, fixed latent README tree drift; 5/5 gates pass; checklists: passed; still uncommitted by user instruction",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792690553.830878,
+      "timestamp_str": "2026-10-22 20:35:53"
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[5/5] Delivery authorized by the user: re-verified 30 tests and 5/5 gates, staging the initial tree, recording bootstrap UI surface evidence, then publishing public; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792691575.398482,
+      "timestamp_str": "2026-10-22 20:52:55"
+    }
+  ]
+}

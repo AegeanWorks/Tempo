@@ -1,0 +1,89 @@
+/*
+ * Every colour, font and visual token Tempo owns.
+ *
+ * This is the only file the UI contract lists as a theme path, so a hardcoded colour or
+ * font anywhere else in web/ is a style-drift finding. Layout lives in app.css.
+ */
+:root {
+  color-scheme: light dark;
+  --tempo-ink: #10131a;
+  --tempo-ink-soft: #5b6472;
+  --tempo-surface: #ffffff;
+  --tempo-page: #eef1f6;
+  --tempo-line: #d4dae4;
+  --tempo-accent: #2f6df6;
+  --tempo-accent-ink: #ffffff;
+  --tempo-rest: #1f9d72;
+  --tempo-dot-idle: #c3cad6;
+  --tempo-font: ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --tempo-font-mono: ui-monospace, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  --tempo-readout-size: 4.5rem;
+  --tempo-eyebrow-size: 0.8rem;
+  --tempo-body-size: 0.95rem;
+  --tempo-radius: 18px;
+  --tempo-focus-ring: #2f6df6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tempo-focus-ring: #6f9bff;
+    --tempo-ink: #eef1f6;
+    --tempo-ink-soft: #9aa5b5;
+    --tempo-surface: #171b23;
+    --tempo-page: #0d1016;
+    --tempo-line: #2a313d;
+    --tempo-accent: #6f9bff;
+    --tempo-accent-ink: #0d1016;
+    --tempo-rest: #4fd1a0;
+    --tempo-dot-idle: #39414f;
+  }
+}
+
+body {
+  background: var(--tempo-page);
+  color: var(--tempo-ink);
+  font-family: var(--tempo-font);
+  font-size: var(--tempo-body-size);
+}
+
+.card {
+  background: var(--tempo-surface);
+  border: 1px solid var(--tempo-line);
+  border-radius: var(--tempo-radius);
+}
+
+.eyebrow {
+  color: var(--tempo-ink-soft);
+  font-size: var(--tempo-eyebrow-size);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.readout {
+  color: var(--tempo-ink);
+  font-family: var(--tempo-font-mono);
+  font-size: var(--tempo-readout-size);
+  font-variant-numeric: tabular-nums;
+}
+
+.card[data-phase="short-break"] .readout,
+.card[data-phase="long-break"] .readout { color: var(--tempo-rest); }
+
+.dot { background: var(--tempo-dot-idle); }
+.dot[data-filled="yes"] { background: var(--tempo-accent); }
+
+.button {
+  background: var(--tempo-surface);
+  border: 1px solid var(--tempo-line);
+  border-radius: calc(var(--tempo-radius) / 2);
+  color: var(--tempo-ink);
+  font: inherit;
+  font-weight: 600;
+}
+
+.button:hover { border-color: var(--tempo-accent); }
+.button.primary { background: var(--tempo-accent); border-color: var(--tempo-accent); color: var(--tempo-accent-ink); }
+.button.quiet { color: var(--tempo-ink-soft); }
+
+.summary, .status { color: var(--tempo-ink-soft); font-size: var(--tempo-eyebrow-size); }

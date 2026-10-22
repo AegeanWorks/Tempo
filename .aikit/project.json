@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "name": "tempo",
+  "test_command": "python -m unittest discover -s tests -t .",
+  "gates": {
+    "dogfood": "python tools/dogfood.py"
+  },
+  "ui_required": true,
+  "created": "2026-10-22"
+}

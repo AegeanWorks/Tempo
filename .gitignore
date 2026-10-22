@@ -1,0 +1,13 @@
+# AIKit transient state
+.aikit/*.lock
+.aikit/*.bak
+.aikit/*.tmp_*
+.aikit/*.corrupt_*
+
+# Tempo runtime and dogfood artefacts (PRINCIPLE-015 R4)
+state/
+.aikit/dogfood_last_run.log
+
+# Python bytecode
+__pycache__/
+*.py[cod]

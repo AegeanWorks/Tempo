@@ -1,0 +1,34 @@
+# Decisions
+
+Why this project is built the way it is, oldest first. One entry per decision that changes a
+contract, a dependency, a data format or the architecture; IDs are consecutive and never reused.
+
+<!-- Entry format:
+### ADR-NNN: <decision in one line>
+- **Date**: YYYY-MM-DD
+- **Status**: Accepted
+- **Context**: <what forced the decision>
+- **Decision**: <what was decided>
+- **Consequences**: <what follows, including what it costs>
+-->
+
+### ADR-001: The timer owns no clock; `now` is always an argument
+- **Date**: 2026-10-22
+- **Status**: Accepted
+- **Context**: A focus timer tested by sleeping is slow and flaky, and a browser cannot be relied on to poll every second.
+- **Decision**: `tempo/session.py` holds frozen states and pure transitions that take `now`. `settled()` advances past phases that elapsed between two polls and carries the overshoot into the new phase.
+- **Consequences**: Every timer rule is unit-testable without sleeping, and a page that polls late lands on the same phase it would have reached by polling every second. The cost is that callers must thread a clock through; `TempoApp` holds the only one.
+
+### ADR-002: All colour and type live in `web/theme.css`, the contract's single theme path
+- **Date**: 2026-10-22
+- **Status**: Accepted
+- **Context**: AIKit's style-drift lint only reports literals outside the theme paths a UI contract declares; with no theme path declared, the lint is off entirely.
+- **Decision**: `web/theme.css` holds every colour, font and token, including the dark-mode block. `web/app.css` carries layout only, and `web/app.js` sets a `data-phase` attribute rather than any style. `.aikit/ui.json` declares `theme_paths: ["web/theme.css"]`.
+- **Consequences**: A hardcoded colour or font anywhere else in `web/` is a mechanical finding rather than a matter of taste. The cost is that typography declarations cannot be written next to the layout they affect, which is why `.readout` is split across the two files.
+
+### ADR-003: The snapshot proof is a parsed inventory, not a rendered screenshot
+- **Date**: 2026-10-22
+- **Status**: Accepted
+- **Context**: PRINCIPLE-015 R1 asks a web app to be loaded in a headless browser, but Tempo declares no dependencies and the standard library ships no browser engine.
+- **Decision**: `tools/ui_inventory.py` parses `web/` and prints one line per identified element, named action, ARIA role, live region, script handler and theme token. `tools/dogfood.py` satisfies the backend-API criterion in full over a real socket and checks that the served page carries every control the script renders into.
+- **Consequences**: A dropped control, action, role, live region or theme token is caught as a lost inventory line, and accessibility attributes are guarded alongside controls. A purely visual regression that keeps the inventory intact is not caught; that gap is deliberate and is the price of zero dependencies.

@@ -1,0 +1,162 @@
+"""
+The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.
+
+`TempoApp` is the whole backend contract — settle the stored session against the clock,
+apply one named action, hand back the snapshot the UI renders. The request handler only
+translates HTTP into those two calls, so the timer can be tested without a socket.
+
+PRINCIPLE-009, PRINCIPLE-010, PRINCIPLE-011, PRINCIPLE-013.
+"""
+
+import json
+from dataclasses import dataclass
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from pathlib import Path
+from typing import Callable, Dict, Optional, Tuple
+from urllib.parse import urlparse
+
+from tempo.phases import PhasePlan
+from tempo.session import advanced, paused, reset, settled, started
+from tempo.status import snapshot
+from tempo.store import SessionStore, StoreError
+
+MAX_BODY_BYTES = 4096
+READ_TIMEOUT_SECONDS = 10
+CONTENT_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8",
+    ".svg": "image/svg+xml",
+}
+WEB_ROOT = Path(__file__).resolve().parent.parent / "web"
+
+
+@dataclass(frozen=True)
+class StaticFiles:
+    """Resolves a URL path to a file inside one directory, and never outside it."""
+
+    root: Path
+
+    def resolve(self, url_path: str) -> Optional[Path]:
+        """The file a URL path names, or None when it escapes or does not exist."""
+        relative = url_path.lstrip("/") or "index.html"
+        candidate = (self.root / relative).resolve()
+        try:
+            candidate.relative_to(self.root.resolve())
+        except ValueError:
+            return None
+        return candidate if candidate.is_file() else None
+
+
+class TempoApp:
+    """One session's backend: settle it against the clock, act on it, report it."""
+
+    ACTIONS = ("toggle", "skip", "reset")
+
+    def __init__(self, store: SessionStore, plan: PhasePlan,
+                 clock: Callable[[], float]):
+        self.store = store
+        self.plan = plan.validated()
+        self.clock = clock
+
+    def status(self) -> Dict[str, object]:
+        """The current snapshot, persisting any phases that elapsed since the last call."""
+        now = self.clock()
+        stored = self.store.load()
+        current = settled(stored, self.plan, now)
+        if current != stored:
+            self.store.save(current)
+        return snapshot(current, self.plan, now)
+
+    def apply(self, action: str) -> Dict[str, object]:
+        """The snapshot after one named action; an unknown action raises ValueError."""
+        if action not in self.ACTIONS:
+            raise ValueError(f"unknown action {action!r}; expected one of "
+                             f"{', '.join(self.ACTIONS)}")
+        now = self.clock()
+        current = settled(self.store.load(), self.plan, now)
+        if action == "toggle":
+            current = paused(current, now) if current.running else started(current, now)
+        elif action == "skip":
+            current = advanced(current, self.plan, now)
+        else:
+            current = reset(current)
+        self.store.save(current)
+        return snapshot(current, self.plan, now)
+
+
+class TempoHandler(BaseHTTPRequestHandler):
+    """Translates requests into `TempoApp` calls; the app owns every timer rule."""
+
+    protocol_version = "HTTP/1.1"
+    timeout = READ_TIMEOUT_SECONDS
+    # Headers and body leave in one segment, so a localhost poll is not held up for a
+    # delayed ACK (PRINCIPLE-010 R1).
+    disable_nagle_algorithm = True
+    wbufsize = 64 * 1024
+    app: Optional[TempoApp] = None
+    files: Optional[StaticFiles] = None
+
+    def do_GET(self) -> None:  # noqa: N802 - stdlib handler contract
+        route = urlparse(self.path).path
+        if route == "/api/status":
+            self._guarded(lambda: (200, self.app.status()))
+            return
+        target = self.files.resolve(route)
+        if target is None:
+            self._json(404, {"error": "not found", "path": route})
+            return
+        body = target.read_bytes()
+        self._respond(200, CONTENT_TYPES.get(target.suffix, "application/octet-stream"),
+                      body, cache=route != "/" and not route.endswith(".html"))
+
+    def do_POST(self) -> None:  # noqa: N802 - stdlib handler contract
+        if urlparse(self.path).path != "/api/action":
+            self._json(404, {"error": "not found", "path": self.path})
+            return
+        length = int(self.headers.get("Content-Length") or 0)
+        if length > MAX_BODY_BYTES:
+            self._json(413, {"error": f"body over {MAX_BODY_BYTES} bytes"})
+            return
+        raw = self.rfile.read(length) if length else b"{}"
+        self._guarded(lambda: self._act(raw))
+
+    def _act(self, raw: bytes) -> Tuple[int, Dict[str, object]]:
+        payload = json.loads(raw.decode("utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("body must be a JSON object with an 'action' field")
+        return 200, self.app.apply(str(payload.get("action", "")))
+
+    def _guarded(self, call: Callable[[], Tuple[int, Dict[str, object]]]) -> None:
+        try:
+            status, payload = call()
+        except ValueError as error:
+            self._json(400, {"error": str(error)})
+        except StoreError as error:
+            self._json(500, {"error": str(error), "why": error.why, "fix": error.fix})
+        else:
+            self._json(status, payload)
+
+    def _json(self, status: int, payload: Dict[str, object]) -> None:
+        body = json.dumps(payload).encode("utf-8")
+        self._respond(status, "application/json; charset=utf-8", body, cache=False)
+
+    def _respond(self, status: int, content_type: str, body: bytes, cache: bool) -> None:
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "max-age=60" if cache else "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+        self.wfile.flush()
+
+    def log_message(self, format: str, *args) -> None:
+        """Silent by default; `run.py` prints the one line a user needs."""
+
+
+def build_server(app: TempoApp, port: int, web: Path = WEB_ROOT,
+                 host: str = "127.0.0.1") -> HTTPServer:
+    """An HTTP server bound to `host:port`, serving `web` and `app`."""
+    handler = type("BoundTempoHandler", (TempoHandler,),
+                   {"app": app, "files": StaticFiles(web)})
+    return HTTPServer((host, port), handler)
