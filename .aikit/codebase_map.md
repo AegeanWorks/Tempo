@@ -9,8 +9,8 @@
 - **Total Python Modules**: `15`
 - **Total Classes**: `19`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `64`
-- **Total Source Lines**: `1354`
+- **Total Class Methods**: `69`
+- **Total Source Lines**: `1439`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `177` lines (`7180` bytes)
+**Size**: `187` lines (`7922` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -59,7 +59,7 @@
 - `class TempoApp` - *One session's backend: settle it against the clock, act on it, report it.*
   - Method `.__init__(store, plan, clock)`
   - Method `.status()` - *The current snapshot, persisting any phases that elapsed since the last call.*
-  - Method `.apply(action)` - *The snapshot after one named action; an unknown action raises ValueError.*
+  - Method `.apply(action, params)` - *The snapshot after one named action; an unknown action raises ValueError.*
 - `class TempoHandler` - *Translates requests into `TempoApp` calls; the app owns every timer rule.*
   - Method `.do_GET()`
   - Method `.do_POST()`
@@ -79,7 +79,7 @@
 ### [`tempo/session.py`](tempo/session.py)
 > *Session state and its transitions.*
 
-**Size**: `100` lines (`3682` bytes)
+**Size**: `103` lines (`3832` bytes)
 
 **Classes:**
 - `class SessionState` - *Where a session stands: its phase, its run clock and its finished focus count.*
@@ -99,7 +99,7 @@
 ### [`tempo/status.py`](tempo/status.py)
 > *The read model the UI renders.*
 
-**Size**: `31` lines (`1112` bytes)
+**Size**: `43` lines (`1733` bytes)
 
 **Functions:**
 - `def snapshot(state, plan, now)` - *A settled session as the flat payload `GET /api/status` returns.*
@@ -109,7 +109,7 @@
 ### [`tempo/store.py`](tempo/store.py)
 > *Crash-safe persistence for one session.*
 
-**Size**: `115` lines (`4532` bytes)
+**Size**: `134` lines (`5377` bytes)
 
 **Classes:**
 - `class StoreError` - *A state file this build must not touch: the caller reports why and the fix.*
@@ -117,7 +117,8 @@
 - `class SessionStore` - *Reads and writes one session file, atomically and without ever losing the old one.*
   - Method `.__init__(path)`
   - Method `.load()` - *The stored session, or a fresh one when no readable file exists.*
-  - Method `.save(state)` - *The session on disk, replaced atomically; the directory is created if missing.*
+  - Method `.load_plan()` - *The stored phase plan, or None if not saved or unreadable.*
+  - Method `.save(state, plan)` - *The session on disk, replaced atomically; the directory is created if missing.*
   - Method `._replace(temporary)`
   - Method `._quarantine()`
 
@@ -136,7 +137,7 @@
 ### [`tests/test_app.py`](tests/test_app.py)
 > *Unit tests for the backend contract: status, actions and static path safety.*
 
-**Size**: `97` lines (`3634` bytes)
+**Size**: `112` lines (`4408` bytes)
 
 **Classes:**
 - `class FakeClock` - *A clock the test moves by hand, so no test ever sleeps (PRINCIPLE-014 R5).*
@@ -148,6 +149,7 @@
   - Method `.test_toggle_starts_then_pauses_and_the_clock_only_runs_while_started()`
   - Method `.test_status_persists_phases_that_elapsed_between_polls()`
   - Method `.test_skip_moves_on_and_reset_starts_over()`
+  - Method `.test_configure_action_updates_plan_and_persists_it()`
   - Method `.test_unknown_action_is_refused_and_leaves_the_session_alone()`
   - Method `.test_an_invalid_plan_is_refused_when_the_app_is_built()`
 - `class StaticFilesTest`
@@ -178,7 +180,7 @@
 ### [`tests/test_session.py`](tests/test_session.py)
 > *Unit tests for the phase plan, session transitions and the status read model.*
 
-**Size**: `87` lines (`3736` bytes)
+**Size**: `105` lines (`4673` bytes)
 
 **Classes:**
 - `class PhasePlanTest`
@@ -192,8 +194,10 @@
   - Method `.test_paused_session_never_settles_forward()`
   - Method `.test_settle_carries_overshoot_into_the_new_phase()`
   - Method `.test_reset_returns_a_fresh_session()`
+  - Method `.test_advanced_records_completed_focus_in_history()`
 - `class SnapshotTest`
   - Method `.test_snapshot_reports_whole_seconds_and_cycle_position()`
+  - Method `.test_snapshot_includes_plan_durations_and_analytics()`
   - Method `.test_remaining_never_goes_negative()`
 
 ---
@@ -201,13 +205,14 @@
 ### [`tests/test_store.py`](tests/test_store.py)
 > *Unit tests for atomic session persistence, schema refusal and quarantine.*
 
-**Size**: `72` lines (`3139` bytes)
+**Size**: `80` lines (`3547` bytes)
 
 **Classes:**
 - `class SessionStoreTest`
   - Method `.setUp()`
   - Method `.test_missing_file_reads_as_a_fresh_session()`
   - Method `.test_round_trip_preserves_every_field()`
+  - Method `.test_plan_persistence_and_reload()`
   - Method `.test_save_leaves_no_temporary_files_behind()`
   - Method `.test_unknown_schema_is_refused_without_touching_the_file()`
   - Method `.test_corrupt_file_is_quarantined_and_replaced_by_a_fresh_session()`

@@ -22,9 +22,17 @@ class SessionStoreTest(unittest.TestCase):
 
     def test_round_trip_preserves_every_field(self):
         state = SessionState(phase_index=3, running=True, started_at=12.5,
-                             spent_seconds=4.25, completed_focus=2)
+                             spent_seconds=4.25, completed_focus=2, history=(100.0, 200.0))
         self.store.save(state)
         self.assertEqual(state, self.store.load())
+
+    def test_plan_persistence_and_reload(self):
+        from tempo.phases import PhasePlan
+        state = SessionState.initial()
+        plan = PhasePlan(focus_seconds=1200, short_break_seconds=300, long_break_seconds=900, cycle_length=5)
+        self.store.save(state, plan)
+        self.assertEqual(state, self.store.load())
+        self.assertEqual(plan, self.store.load_plan())
 
     def test_save_leaves_no_temporary_files_behind(self):
         self.store.save(SessionState.initial())

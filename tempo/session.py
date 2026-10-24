@@ -13,7 +13,7 @@ PRINCIPLE-003, PRINCIPLE-009, PRINCIPLE-014.
 """
 
 from dataclasses import dataclass, replace
-from typing import Optional
+from typing import Optional, Tuple
 
 from tempo.phases import FOCUS, PhasePlan
 
@@ -29,6 +29,7 @@ class SessionState:
     started_at: Optional[float] = None
     spent_seconds: float = 0.0
     completed_focus: int = 0
+    history: Tuple[float, ...] = ()
 
     @staticmethod
     def initial() -> "SessionState":
@@ -68,12 +69,14 @@ def paused(state: SessionState, now: float) -> SessionState:
 def advanced(state: SessionState, plan: PhasePlan, now: float) -> SessionState:
     """The next phase, from a standing start, counting a finished focus phase."""
     finished_focus = plan.phase_at(state.phase_index).kind == FOCUS
+    new_history = (state.history + ((now,) if finished_focus else ()))[-200:]
     return SessionState(
         phase_index=state.phase_index + 1,
         running=state.running,
         started_at=now if state.running else None,
         spent_seconds=0.0,
         completed_focus=state.completed_focus + (1 if finished_focus else 0),
+        history=new_history,
     )
 
 

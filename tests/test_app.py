@@ -62,6 +62,21 @@ class TempoAppTest(unittest.TestCase):
         self.assertEqual(0, fresh["completed_focus"])
         self.assertFalse(fresh["running"])
 
+    def test_configure_action_updates_plan_and_persists_it(self):
+        updated = self.app.apply("configure", {
+            "focus_seconds": 30 * 60,
+            "short_break_seconds": 6 * 60,
+            "long_break_seconds": 20 * 60,
+            "cycle_length": 3
+        })
+        self.assertEqual(30 * 60, updated["focus_seconds"])
+        self.assertEqual(6 * 60, updated["short_break_seconds"])
+        self.assertEqual(20 * 60, updated["long_break_seconds"])
+        self.assertEqual(3, updated["cycle_length"])
+        # A fresh app instance with the same store reloads the configured plan
+        reloaded_app = TempoApp(SessionStore(self.root / "session.json"), SHORT_PLAN, self.clock)
+        self.assertEqual(30 * 60, reloaded_app.status()["focus_seconds"])
+
     def test_unknown_action_is_refused_and_leaves_the_session_alone(self):
         self.app.apply("toggle")
         with self.assertRaisesRegex(ValueError, "unknown action"):

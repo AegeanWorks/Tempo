@@ -8,6 +8,7 @@ touching the timer's rules.
 PRINCIPLE-009, PRINCIPLE-012.
 """
 
+from datetime import datetime
 from typing import Dict
 
 from tempo.phases import PhasePlan
@@ -18,6 +19,11 @@ def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, obje
     """A settled session as the flat payload `GET /api/status` returns."""
     phase = plan.phase_at(state.phase_index)
     remaining = remaining_seconds(state, plan, now)
+    try:
+        today = datetime.fromtimestamp(now).date()
+        today_count = sum(1 for ts in state.history if datetime.fromtimestamp(ts).date() == today)
+    except (OSError, OverflowError, ValueError):
+        today_count = state.completed_focus
     return {
         "phase": phase.kind,
         "phase_index": state.phase_index,
@@ -28,4 +34,10 @@ def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, obje
         "completed_focus": state.completed_focus,
         "cycle_position": state.completed_focus % plan.cycle_length,
         "cycle_length": plan.cycle_length,
+        "focus_seconds": plan.focus_seconds,
+        "short_break_seconds": plan.short_break_seconds,
+        "long_break_seconds": plan.long_break_seconds,
+        "today_focus_count": today_count,
+        "today_focus_seconds": today_count * plan.focus_seconds,
+        "total_focus_seconds": state.completed_focus * plan.focus_seconds,
     }

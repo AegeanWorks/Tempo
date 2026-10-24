@@ -65,6 +65,14 @@ class SessionTransitionTest(unittest.TestCase):
         self.assertEqual(SessionState.initial(), reset(settled(started(
             SessionState.initial(), 0.0), SHORT_PLAN, 99.0)))
 
+    def test_advanced_records_completed_focus_in_history(self):
+        state = SessionState.initial()
+        state = advanced(state, SHORT_PLAN, 100.0)
+        self.assertEqual(1, len(state.history))
+        self.assertEqual(100.0, state.history[0])
+        state = advanced(state, SHORT_PLAN, 105.0)
+        self.assertEqual(1, len(state.history))
+
 
 class SnapshotTest(unittest.TestCase):
 
@@ -77,6 +85,16 @@ class SnapshotTest(unittest.TestCase):
         self.assertTrue(payload["running"])
         self.assertEqual(1, payload["completed_focus"])
         self.assertEqual(1, payload["cycle_position"])
+
+    def test_snapshot_includes_plan_durations_and_analytics(self):
+        state = SessionState(phase_index=0, running=False, completed_focus=2, history=(1700000000.0,))
+        payload = snapshot(state, SHORT_PLAN, 1700000000.0)
+        self.assertEqual(10, payload["focus_seconds"])
+        self.assertEqual(5, payload["short_break_seconds"])
+        self.assertEqual(8, payload["long_break_seconds"])
+        self.assertEqual(1, payload["today_focus_count"])
+        self.assertEqual(10, payload["today_focus_seconds"])
+        self.assertEqual(20, payload["total_focus_seconds"])
 
     def test_remaining_never_goes_negative(self):
         stuck = SessionState(phase_index=0, running=False, spent_seconds=99.0)

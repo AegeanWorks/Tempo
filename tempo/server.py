@@ -56,12 +56,13 @@ class StaticFiles:
 class TempoApp:
     """One session's backend: settle it against the clock, act on it, report it."""
 
-    ACTIONS = ("toggle", "skip", "reset")
+    ACTIONS = ("toggle", "skip", "reset", "configure")
 
     def __init__(self, store: SessionStore, plan: PhasePlan,
                  clock: Callable[[], float]):
         self.store = store
-        self.plan = plan.validated()
+        saved_plan = self.store.load_plan()
+        self.plan = saved_plan if saved_plan is not None else plan.validated()
         self.clock = clock
 
     def status(self) -> Dict[str, object]:
@@ -70,10 +71,10 @@ class TempoApp:
         stored = self.store.load()
         current = settled(stored, self.plan, now)
         if current != stored:
-            self.store.save(current)
+            self.store.save(current, self.plan)
         return snapshot(current, self.plan, now)
 
-    def apply(self, action: str) -> Dict[str, object]:
+    def apply(self, action: str, params: Optional[Dict[str, object]] = None) -> Dict[str, object]:
         """The snapshot after one named action; an unknown action raises ValueError."""
         if action not in self.ACTIONS:
             raise ValueError(f"unknown action {action!r}; expected one of "
@@ -84,9 +85,17 @@ class TempoApp:
             current = paused(current, now) if current.running else started(current, now)
         elif action == "skip":
             current = advanced(current, self.plan, now)
-        else:
+        elif action == "reset":
             current = reset(current)
-        self.store.save(current)
+        elif action == "configure":
+            cfg = params or {}
+            focus = int(cfg.get("focus_seconds") or self.plan.focus_seconds)
+            short_b = int(cfg.get("short_break_seconds") or self.plan.short_break_seconds)
+            long_b = int(cfg.get("long_break_seconds") or self.plan.long_break_seconds)
+            cycle_l = int(cfg.get("cycle_length") or self.plan.cycle_length)
+            from tempo.phases import PhasePlan
+            self.plan = PhasePlan(focus, short_b, long_b, cycle_l).validated()
+        self.store.save(current, self.plan)
         return snapshot(current, self.plan, now)
 
 
@@ -130,7 +139,8 @@ class TempoHandler(BaseHTTPRequestHandler):
         payload = json.loads(raw.decode("utf-8"))
         if not isinstance(payload, dict):
             raise ValueError("body must be a JSON object with an 'action' field")
-        return 200, self.app.apply(str(payload.get("action", "")))
+        action = str(payload.get("action", ""))
+        return 200, self.app.apply(action, payload)
 
     def _guarded(self, call: Callable[[], Tuple[int, Dict[str, object]]]) -> None:
         try:

@@ -44,12 +44,15 @@ def _decode(payload: object) -> SessionState:
     session = payload.get("session")
     if not isinstance(session, dict) or any(field not in session for field in FIELDS):
         raise ValueError("state file is missing session fields")
+    history_raw = session.get("history", ())
+    history = tuple(float(x) for x in history_raw) if isinstance(history_raw, (list, tuple)) else ()
     return SessionState(
         phase_index=int(session["phase_index"]),
         running=bool(session["running"]),
         started_at=None if session["started_at"] is None else float(session["started_at"]),
         spent_seconds=float(session["spent_seconds"]),
         completed_focus=int(session["completed_focus"]),
+        history=history,
     )
 
 
@@ -73,10 +76,26 @@ class SessionStore:
             self._quarantine()
             return SessionState.initial()
 
-    def save(self, state: SessionState) -> None:
+    def load_plan(self) -> Optional[object]:
+        """The stored phase plan, or None if not saved or unreadable."""
+        if not self.path.exists():
+            return None
+        try:
+            with open(self.path, "r", encoding="utf-8") as handle:
+                payload = json.load(handle)
+            if isinstance(payload, dict) and isinstance(payload.get("plan"), dict):
+                from tempo.phases import PhasePlan
+                return PhasePlan(**payload["plan"]).validated()
+        except Exception:
+            return None
+        return None
+
+    def save(self, state: SessionState, plan: Optional[object] = None) -> None:
         """The session on disk, replaced atomically; the directory is created if missing."""
         self.path.parent.mkdir(parents=True, exist_ok=True)
         payload = {"schema": SCHEMA, "session": asdict(state)}
+        if plan is not None:
+            payload["plan"] = asdict(plan)
         handle = tempfile.NamedTemporaryFile(
             "w", encoding="utf-8", dir=str(self.path.parent),
             prefix=self.path.name + ".", suffix=".tmp", delete=False)
