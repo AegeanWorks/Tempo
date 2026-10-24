@@ -226,7 +226,7 @@
 ### [`tools/dogfood.py`](tools/dogfood.py)
 > *Tempo's own dogfood runner: use the product the way a user does, then attack it.*
 
-**Size**: `318` lines (`13619` bytes)
+**Size**: `318` lines (`13641` bytes)
 
 **Classes:**
 - `class Report` - *Collects step outcomes: the console sees a summary, the log sees everything.*

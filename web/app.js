@@ -9,15 +9,65 @@
   "use strict";
 
   var POLL_MS = 1000;
-  var ACTIONS = { toggle: "toggle", skip: "skip", reset: "reset" };
+  var ACTIONS = { toggle: "toggle", skip: "skip", reset: "reset", sound: "sound" };
 
   var card = document.querySelector(".card");
   var display = document.getElementById("timer-display");
   var phaseLabel = document.getElementById("phase-label");
   var dots = document.getElementById("cycle-dots");
   var runButton = document.getElementById("run-button");
+  var soundButton = document.getElementById("sound-button");
   var summary = document.getElementById("session-summary");
   var statusLine = document.getElementById("status-line");
+
+  var lastPhaseIndex = null;
+  var soundEnabled = true;
+  try {
+    var stored = localStorage.getItem("tempo-sound");
+    if (stored !== null) { soundEnabled = stored === "true"; }
+  } catch (e) {}
+
+  var audioContext = null;
+  function getAudioContext() {
+    if (!audioContext && (window.AudioContext || window.webkitAudioContext)) {
+      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+      audioContext = new AudioCtx();
+    }
+    if (audioContext && audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+    return audioContext;
+  }
+
+  function playChime(kind) {
+    if (!soundEnabled) { return; }
+    var ctx = getAudioContext();
+    if (!ctx) { return; }
+    try {
+      var now = ctx.currentTime;
+      var notes = kind === "focus" ? [659.25, 523.25] : [523.25, 659.25];
+      notes.forEach(function (freq, index) {
+        var osc = ctx.createOscillator();
+        var gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now + index * 0.15);
+        gain.gain.setValueAtTime(0.12, now + index * 0.15);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.15 + 0.32);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now + index * 0.15);
+        osc.stop(now + index * 0.15 + 0.33);
+      });
+    } catch (e) {}
+  }
+
+  function updateSoundButton() {
+    if (soundButton) {
+      soundButton.textContent = soundEnabled ? "Sound on" : "Sound off";
+      soundButton.setAttribute("aria-pressed", soundEnabled ? "true" : "false");
+    }
+  }
+  updateSoundButton();
 
   var PHASE_NAMES = {
     "focus": "focus",
@@ -45,6 +95,10 @@
   }
 
   function render(status) {
+    if (lastPhaseIndex !== null && status.phase_index !== lastPhaseIndex) {
+      playChime(status.phase);
+    }
+    lastPhaseIndex = status.phase_index;
     card.setAttribute("data-phase", status.phase);
     display.textContent = formatClock(status.remaining_seconds);
     phaseLabel.textContent = PHASE_NAMES[status.phase] || status.phase;
@@ -74,6 +128,14 @@
   }
 
   function send(action) {
+    getAudioContext();
+    if (action === ACTIONS.sound) {
+      soundEnabled = !soundEnabled;
+      try { localStorage.setItem("tempo-sound", String(soundEnabled)); } catch (e) {}
+      updateSoundButton();
+      if (soundEnabled) { playChime("preview"); }
+      return;
+    }
     request("/api/action", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

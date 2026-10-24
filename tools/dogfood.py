@@ -42,7 +42,7 @@ STATUS_FIELDS = ("phase", "phase_index", "phase_seconds", "remaining_seconds",
                  "elapsed_seconds", "running", "completed_focus", "cycle_position",
                  "cycle_length")
 CONTROLS = (b'id="run-button"', b'id="skip-button"', b'id="reset-button"',
-            b'id="timer-display"', b'id="cycle-dots"')
+            b'id="sound-button"', b'id="timer-display"', b'id="cycle-dots"')
 
 
 class Report:
