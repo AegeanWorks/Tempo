@@ -1,5 +1,7 @@
 # tempo
 
+[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/Aegean-E/AIKit)
+
 A focus timer you run on your own machine: one Python process, a browser page, no
 dependencies, no account and no network calls. Phases alternate focus and break, and
 every fourth break is a long one.
