@@ -10,7 +10,7 @@
 - **Total Classes**: `19`
 - **Total Top-Level Functions**: `31`
 - **Total Class Methods**: `69`
-- **Total Source Lines**: `1439`
+- **Total Source Lines**: `1449`
 
 ---
 
@@ -231,7 +231,7 @@
 ### [`tools/dogfood.py`](tools/dogfood.py)
 > *Tempo's own dogfood runner: use the product the way a user does, then attack it.*
 
-**Size**: `318` lines (`13641` bytes)
+**Size**: `328` lines (`14262` bytes)
 
 **Classes:**
 - `class Report` - *Collects step outcomes: the console sees a summary, the log sees everything.*

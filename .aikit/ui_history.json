@@ -26,5 +26,19 @@
     "final_snapshot_digest": "d70c8efdcd3a14e9e6b9f61e9218e5e8bc8a05aa00caac6d8e7d3081e2bec1cc",
     "final_snapshot_entries": 37,
     "surface_digest": "e14072f358e5ef4ab64309774e29db3d64ed9c911bf42ad1a34f9fbe83173e95"
+  },
+  {
+    "schema": 1,
+    "surface": "web",
+    "baseline_commit": "ca07391b134ea193e3b33e07c564a8e69d54521b",
+    "contract_hash": "ee4096b968fbf316a7e2271f12f7b40918b2937706484c6144a341603b8ae86d",
+    "started_at": 1792832399.7862644,
+    "finished_at": 1792832536.1602354,
+    "strikes": 0,
+    "reviewer": "",
+    "allowed_removals": [],
+    "final_snapshot_digest": "2f3e73d746106702a41b379b85cb952dc3bb55e3aa73502bf914a2186f2c83a6",
+    "final_snapshot_entries": 51,
+    "surface_digest": "5fe654f20528acebb827fe607da5e1853a6fc338a3cb551e11e14655fe321151"
   }
 ]

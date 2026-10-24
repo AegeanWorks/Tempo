@@ -17,9 +17,34 @@
     <button class="button" id="skip-button" data-action="skip" type="button">Skip phase</button>
     <button class="button quiet" id="reset-button" data-action="reset" type="button">Reset</button>
     <button class="button quiet" id="sound-button" data-action="sound" type="button" aria-pressed="true">Sound on</button>
+    <button class="button quiet" id="settings-button" data-action="settings" type="button" aria-expanded="false">Settings</button>
   </div>
   <p class="summary" id="session-summary">no focus phases finished yet</p>
+  <p class="analytics" id="analytics-summary" role="note"></p>
   <p class="status" id="status-line" role="status" aria-live="polite"></p>
+
+  <form class="settings-panel hidden" id="settings-panel" aria-label="Interval settings">
+    <div class="field">
+      <label for="focus-input">Focus (min)</label>
+      <input type="number" id="focus-input" min="1" max="180" value="25" required>
+    </div>
+    <div class="field">
+      <label for="short-break-input">Short break (min)</label>
+      <input type="number" id="short-break-input" min="1" max="60" value="5" required>
+    </div>
+    <div class="field">
+      <label for="long-break-input">Long break (min)</label>
+      <input type="number" id="long-break-input" min="1" max="60" value="15" required>
+    </div>
+    <div class="field">
+      <label for="cycle-input">Cycle length</label>
+      <input type="number" id="cycle-input" min="1" max="12" value="4" required>
+    </div>
+    <div class="settings-actions">
+      <button class="button primary" id="save-settings-button" data-action="save-settings" type="button">Save</button>
+      <button class="button quiet" id="close-settings-button" data-action="close-settings" type="button">Close</button>
+    </div>
+  </form>
 </main>
 <script src="app.js"></script>
 </body>

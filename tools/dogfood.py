@@ -42,7 +42,8 @@ STATUS_FIELDS = ("phase", "phase_index", "phase_seconds", "remaining_seconds",
                  "elapsed_seconds", "running", "completed_focus", "cycle_position",
                  "cycle_length")
 CONTROLS = (b'id="run-button"', b'id="skip-button"', b'id="reset-button"',
-            b'id="sound-button"', b'id="timer-display"', b'id="cycle-dots"')
+            b'id="sound-button"', b'id="settings-button"', b'id="settings-panel"',
+            b'id="analytics-summary"', b'id="timer-display"', b'id="cycle-dots"')
 
 
 class Report:
@@ -168,6 +169,12 @@ def golden_path(base: str, state: Path, report: Report) -> None:
     report.step(elapsed < API_BUDGET_MS, "status answers inside its 500ms budget",
                 f"{elapsed:.0f}ms")
 
+    code, body = post(base, {"action": "configure", "focus_seconds": 3,
+                             "short_break_seconds": 2, "long_break_seconds": 5,
+                             "cycle_length": 2})
+    report.step(code == 200 and json.loads(body)["focus_seconds"] == 3,
+                "configure action updates the phase plan", f"HTTP {code}")
+
     code, body = post(base, {"action": "toggle"})
     report.step(code == 200 and json.loads(body)["running"] is True,
                 "toggle starts the timer", f"HTTP {code}")
@@ -208,6 +215,9 @@ def drop_mid_request(base: str, port: int, report: Report) -> None:
 def chaos(base: str, port: int, state: Path, report: Report) -> None:
     """Hostile inputs: malformed JSON, bad values, a flood and a corrupt session (R5)."""
     drop_mid_request(base, port, report)
+
+    code, body = post(base, {"action": "configure", "focus_seconds": -10})
+    report.step(code == 400 and b"error" in body, "negative interval duration answers 400", f"HTTP {code}")
 
     code, body = post(base, None, raw=b"{not json at all")
     report.step(code == 400 and b"error" in body, "malformed JSON answers 400", f"HTTP {code}")

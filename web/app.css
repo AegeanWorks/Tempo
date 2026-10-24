@@ -62,7 +62,39 @@ body {
 }
 
 .summary { margin: 1.25rem 0 0; }
+.analytics { margin: 0.35rem 0 0; }
 .status { margin: 0.35rem 0 0; min-height: 1.2em; }
+
+.hidden { display: none !important; }
+
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--tempo-line);
+  text-align: left;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.field input {
+  width: 4.5rem;
+  padding: 0.35rem 0.5rem;
+  text-align: right;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
 
 @media (max-width: 24rem) {
   .card { padding: 1.5rem 1rem 1rem; }

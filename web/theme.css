@@ -86,4 +86,17 @@ body {
 .button.primary { background: var(--tempo-accent); border-color: var(--tempo-accent); color: var(--tempo-accent-ink); }
 .button.quiet { color: var(--tempo-ink-soft); }
 
-.summary, .status { color: var(--tempo-ink-soft); font-size: var(--tempo-eyebrow-size); }
+.summary, .status, .analytics { color: var(--tempo-ink-soft); font-size: var(--tempo-eyebrow-size); }
+
+.settings-panel input[type="number"] {
+  background: var(--tempo-surface);
+  border: 1px solid var(--tempo-line);
+  border-radius: calc(var(--tempo-radius) / 4);
+  color: var(--tempo-ink);
+  font: inherit;
+}
+
+.settings-panel label {
+  color: var(--tempo-ink-soft);
+  font-size: var(--tempo-body-size);
+}
