@@ -85,7 +85,10 @@ class SessionStore:
                 payload = json.load(handle)
             if isinstance(payload, dict) and isinstance(payload.get("plan"), dict):
                 from tempo.phases import PhasePlan
-                return PhasePlan(**payload["plan"]).validated()
+                plan_dict = payload["plan"]
+                fields = ("focus_seconds", "short_break_seconds", "long_break_seconds", "cycle_length")
+                kwargs = {k: int(plan_dict[k]) for k in fields if k in plan_dict}
+                return PhasePlan(**kwargs).validated()
         except Exception:
             return None
         return None

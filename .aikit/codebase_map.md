@@ -9,8 +9,8 @@
 - **Total Python Modules**: `15`
 - **Total Classes**: `19`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `69`
-- **Total Source Lines**: `1449`
+- **Total Class Methods**: `71`
+- **Total Source Lines**: `1474`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `187` lines (`7922` bytes)
+**Size**: `187` lines (`8186` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -109,7 +109,7 @@
 ### [`tempo/store.py`](tempo/store.py)
 > *Crash-safe persistence for one session.*
 
-**Size**: `134` lines (`5377` bytes)
+**Size**: `137` lines (`5598` bytes)
 
 **Classes:**
 - `class StoreError` - *A state file this build must not touch: the caller reports why and the fix.*
@@ -137,7 +137,7 @@
 ### [`tests/test_app.py`](tests/test_app.py)
 > *Unit tests for the backend contract: status, actions and static path safety.*
 
-**Size**: `112` lines (`4408` bytes)
+**Size**: `120` lines (`4796` bytes)
 
 **Classes:**
 - `class FakeClock` - *A clock the test moves by hand, so no test ever sleeps (PRINCIPLE-014 R5).*
@@ -150,6 +150,7 @@
   - Method `.test_status_persists_phases_that_elapsed_between_polls()`
   - Method `.test_skip_moves_on_and_reset_starts_over()`
   - Method `.test_configure_action_updates_plan_and_persists_it()`
+  - Method `.test_configure_with_invalid_values_raises_value_error()`
   - Method `.test_unknown_action_is_refused_and_leaves_the_session_alone()`
   - Method `.test_an_invalid_plan_is_refused_when_the_app_is_built()`
 - `class StaticFilesTest`
@@ -162,7 +163,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `107` lines (`4592` bytes)
+**Size**: `121` lines (`5155` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -171,6 +172,7 @@
   - Method `.post(path, payload)`
   - Method `.test_status_and_actions_round_trip_over_http()`
   - Method `.test_the_page_and_its_assets_are_served_with_their_types()`
+  - Method `.test_configure_action_over_http()`
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
   - Method `.test_unknown_paths_answer_404()`

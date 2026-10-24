@@ -77,6 +77,14 @@ class TempoAppTest(unittest.TestCase):
         reloaded_app = TempoApp(SessionStore(self.root / "session.json"), SHORT_PLAN, self.clock)
         self.assertEqual(30 * 60, reloaded_app.status()["focus_seconds"])
 
+    def test_configure_with_invalid_values_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": -5})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": 0})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"cycle_length": 0})
+
     def test_unknown_action_is_refused_and_leaves_the_session_alone(self):
         self.app.apply("toggle")
         with self.assertRaisesRegex(ValueError, "unknown action"):

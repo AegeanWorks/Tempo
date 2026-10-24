@@ -131,7 +131,7 @@
   }
 
   function render(status) {
-    if (lastPhaseIndex !== null && status.phase_index !== lastPhaseIndex) {
+    if (lastPhaseIndex !== null && status.phase_index > lastPhaseIndex) {
       playChime(status.phase);
     }
     lastPhaseIndex = status.phase_index;
@@ -233,7 +233,18 @@
     });
   });
 
+  if (settingsPanel) {
+    settingsPanel.addEventListener("submit", function (event) {
+      event.preventDefault();
+      saveSettings();
+    });
+  }
+
   document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && settingsOpen) {
+      toggleSettings(false);
+      return;
+    }
     if (event.key === " " && event.target === document.body) {
       event.preventDefault();
       send(ACTIONS.toggle);

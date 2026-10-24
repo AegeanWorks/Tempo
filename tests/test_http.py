@@ -70,6 +70,20 @@ class HttpTest(unittest.TestCase):
             self.assertIn(expected, headers["Content-Type"])
             self.assertTrue(body)
 
+    def test_configure_action_over_http(self):
+        status, updated = self.post("/api/action", {
+            "action": "configure",
+            "focus_seconds": 1200,
+            "short_break_seconds": 240,
+            "long_break_seconds": 600,
+            "cycle_length": 3,
+        })
+        self.assertEqual(200, status)
+        self.assertEqual(1200, updated["focus_seconds"])
+        self.assertEqual(240, updated["short_break_seconds"])
+        self.assertEqual(600, updated["long_break_seconds"])
+        self.assertEqual(3, updated["cycle_length"])
+
     def test_an_unknown_action_answers_400_with_a_reason(self):
         with self.assertRaises(urllib.error.HTTPError) as caught:
             self.post("/api/action", {"action": "explode"})
