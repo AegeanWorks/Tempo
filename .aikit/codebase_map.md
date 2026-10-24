@@ -7,10 +7,10 @@
 
 ## 📊 Codebase Metrics
 - **Total Python Modules**: `15`
-- **Total Classes**: `18`
-- **Total Top-Level Functions**: `29`
-- **Total Class Methods**: `62`
-- **Total Source Lines**: `1285`
+- **Total Classes**: `19`
+- **Total Top-Level Functions**: `31`
+- **Total Class Methods**: `64`
+- **Total Source Lines**: `1354`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `162` lines (`6482` bytes)
+**Size**: `177` lines (`7180` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -68,6 +68,8 @@
   - Method `._json(status, payload)`
   - Method `._respond(status, content_type, body, cache)`
   - Method `.log_message(format, *args)` - *Silent by default; `run.py` prints the one line a user needs.*
+- `class TempoServer` - *An HTTP server that treats a dropped connection as routine, not as an error.*
+  - Method `.handle_error(request, client_address)` - *Stay silent when the client simply went away; report anything else.*
 
 **Functions:**
 - `def build_server(app, port, web, host)` - *An HTTP server bound to `host:port`, serving `web` and `app`.*
@@ -158,7 +160,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `88` lines (`3715` bytes)
+**Size**: `107` lines (`4592` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -168,6 +170,7 @@
   - Method `.test_status_and_actions_round_trip_over_http()`
   - Method `.test_the_page_and_its_assets_are_served_with_their_types()`
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
+  - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
   - Method `.test_unknown_paths_answer_404()`
 
 ---
@@ -223,7 +226,7 @@
 ### [`tools/dogfood.py`](tools/dogfood.py)
 > *Tempo's own dogfood runner: use the product the way a user does, then attack it.*
 
-**Size**: `283` lines (`11887` bytes)
+**Size**: `318` lines (`13619` bytes)
 
 **Classes:**
 - `class Report` - *Collects step outcomes: the console sees a summary, the log sees everything.*
@@ -231,6 +234,7 @@
   - Method `.step(ok, label, detail)` - *Record one step's outcome and hand back whether it passed.*
 
 **Functions:**
+- `def printable(text)` - *ASCII-safe text: a localized OS message must not break the report on a cp1254 console.*
 - `def terminate_process_tree(process)` - *Kill a process and everything it started, on Windows and on POSIX alike.*
 - `def supervised(command, log)` - *Run a command with stdin closed (R3), killing its whole tree on the way out (R2).*
 - `def free_port()` - *A port the operating system says is free right now.*
@@ -239,7 +243,8 @@
 - `def post(base, payload, raw)` - *One action POST; an HTTP error is an answer here, not an exception.*
 - `def wait_until_serving(base)` - *True once the server answers, False if it never does within the start timeout.*
 - `def golden_path(base, state, report)` - *Load the page, run the timer through a phase change, read the session back (R5).*
-- `def chaos(base, state, report)` - *Hostile inputs: malformed JSON, bad values, a flood and a corrupt session (R5).*
+- `def drop_mid_request(base, port, report)` - *Reset a connection halfway through a request, as a closing browser tab does.*
+- `def chaos(base, port, state, report)` - *Hostile inputs: malformed JSON, bad values, a flood and a corrupt session (R5).*
 - `def surface_proof(report, log)` - *The UI inventory proof runs and reports its surface, as the UI guard expects.*
 - `def main()` - *Run both tracks in one sandbox and print at most 15 lines (R6, R7).*
 

@@ -2,11 +2,10 @@
   "version": 1,
   "active_task": {
     "task_id": "tempo-focus-timer-v1",
-    "last_phase": "phase 5",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1792691760.6187282,
-    "completed_at": 1792691764.8517334
+    "last_phase": "phase 4",
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1792831182.3364592
   },
   "checkpoints": [
     {
@@ -83,6 +82,26 @@
       "status": "completed",
       "timestamp": 1792691764.8517356,
       "timestamp_str": "2026-10-22 20:56:04"
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[5/5] Fixed ConnectionResetError traceback on dropped connections (failing test first), added the dropped-connection chaos probe and the R6 traceback gate, ASCII-safe report; ADR-004; 31 tests, dogfood 21/21, 5/5 gates; checklists: passed; still uncommitted",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792757035.106268,
+      "timestamp_str": "2026-10-23 15:03:55"
+    },
+    {
+      "task_id": "tempo-focus-timer-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[5/5] Delivery authorized: dropped connections handled silently, traceback gate added, ADR-004; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1792831182.3364592,
+      "timestamp_str": "2026-10-24 11:39:42"
     }
   ]
 }

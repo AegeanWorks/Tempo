@@ -32,3 +32,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: PRINCIPLE-015 R1 asks a web app to be loaded in a headless browser, but Tempo declares no dependencies and the standard library ships no browser engine.
 - **Decision**: `tools/ui_inventory.py` parses `web/` and prints one line per identified element, named action, ARIA role, live region, script handler and theme token. `tools/dogfood.py` satisfies the backend-API criterion in full over a real socket and checks that the served page carries every control the script renders into.
 - **Consequences**: A dropped control, action, role, live region or theme token is caught as a lost inventory line, and accessibility attributes are guarded alongside controls. A purely visual regression that keeps the inventory intact is not caught; that gap is deliberate and is the price of zero dependencies.
+
+### ADR-004: A dropped connection is routine; a traceback fails the dogfood run
+- **Date**: 2026-10-23
+- **Status**: Accepted
+- **Context**: A stray server left running answered a client that vanished mid-request and printed a full `ConnectionResetError` traceback, which happens whenever a browser tab closes during a poll. The dogfood runner captured the server's output but never inspected it, so PRINCIPLE-015 R6 was unenforced.
+- **Decision**: `TempoServer.handle_error` stays silent for `ConnectionResetError`, `ConnectionAbortedError` and `BrokenPipeError` and reports anything else. The dogfood runner now resets a connection mid-request as one of its hostile inputs, keeps the server's output in its own sandbox file, and fails the run when that output contains a traceback.
+- **Consequences**: A closing tab no longer looks like a fault, and a genuine unhandled error still surfaces and now fails a gate instead of scrolling past. The cost is that the runner must read the server log back, and its report is forced through ASCII so a localized OS message cannot break the console.

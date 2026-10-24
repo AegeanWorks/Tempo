@@ -9,6 +9,7 @@ PRINCIPLE-009, PRINCIPLE-010, PRINCIPLE-011, PRINCIPLE-013.
 """
 
 import json
+import sys
 from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
@@ -29,6 +30,10 @@ CONTENT_TYPES = {
     ".svg": "image/svg+xml",
 }
 WEB_ROOT = Path(__file__).resolve().parent.parent / "web"
+# A browser that closes a tab, navigates away or is stopped mid-poll resets the
+# connection. That is routine, not a fault, and must not print a traceback: PRINCIPLE-015
+# R6 treats one on stderr as a failed run.
+QUIET_ERRORS = (ConnectionResetError, ConnectionAbortedError, BrokenPipeError)
 
 
 @dataclass(frozen=True)
@@ -154,9 +159,19 @@ class TempoHandler(BaseHTTPRequestHandler):
         """Silent by default; `run.py` prints the one line a user needs."""
 
 
+class TempoServer(HTTPServer):
+    """An HTTP server that treats a dropped connection as routine, not as an error."""
+
+    def handle_error(self, request, client_address) -> None:
+        """Stay silent when the client simply went away; report anything else."""
+        if isinstance(sys.exc_info()[1], QUIET_ERRORS):
+            return
+        super().handle_error(request, client_address)
+
+
 def build_server(app: TempoApp, port: int, web: Path = WEB_ROOT,
-                 host: str = "127.0.0.1") -> HTTPServer:
+                 host: str = "127.0.0.1") -> TempoServer:
     """An HTTP server bound to `host:port`, serving `web` and `app`."""
     handler = type("BoundTempoHandler", (TempoHandler,),
                    {"app": app, "files": StaticFiles(web)})
-    return HTTPServer((host, port), handler)
+    return TempoServer((host, port), handler)

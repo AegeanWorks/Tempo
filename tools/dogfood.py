@@ -19,6 +19,7 @@ import json
 import os
 import signal
 import socket
+import struct
 import subprocess
 import sys
 import tempfile
@@ -36,6 +37,7 @@ START_TIMEOUT = 20.0
 REQUEST_TIMEOUT = 5.0
 API_BUDGET_MS = 500.0
 SUBPROCESS_TIMEOUT = 30
+TRACEBACK_MARKER = "Traceback (most recent call last)"
 STATUS_FIELDS = ("phase", "phase_index", "phase_seconds", "remaining_seconds",
                  "elapsed_seconds", "running", "completed_focus", "cycle_position",
                  "cycle_length")
@@ -57,6 +59,11 @@ class Report:
         if not ok:
             self.failures.append(f"{label}: {detail}" if detail else label)
         return ok
+
+
+def printable(text: str) -> str:
+    """ASCII-safe text: a localized OS message must not break the report on a cp1254 console."""
+    return str(text).encode("ascii", "replace").decode("ascii")
 
 
 def terminate_process_tree(process: subprocess.Popen) -> None:
@@ -185,8 +192,23 @@ def golden_path(base: str, state: Path, report: Report) -> None:
                 "reset clears the session", f"HTTP {code}")
 
 
-def chaos(base: str, state: Path, report: Report) -> None:
+def drop_mid_request(base: str, port: int, report: Report) -> None:
+    """Reset a connection halfway through a request, as a closing browser tab does."""
+    probe = socket.create_connection(("127.0.0.1", port), timeout=REQUEST_TIMEOUT)
+    try:
+        probe.sendall(b"GET /api/status HTTP/1.1\r\nHost: tempo\r\n")
+        probe.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER, struct.pack("ii", 1, 0))
+    finally:
+        probe.close()
+    code, _, _ = get(base, "/api/status")
+    report.step(code == 200, "a dropped connection leaves the server serving",
+                f"HTTP {code}")
+
+
+def chaos(base: str, port: int, state: Path, report: Report) -> None:
     """Hostile inputs: malformed JSON, bad values, a flood and a corrupt session (R5)."""
+    drop_mid_request(base, port, report)
+
     code, body = post(base, None, raw=b"{not json at all")
     report.step(code == 400 and b"error" in body, "malformed JSON answers 400", f"HTTP {code}")
 
@@ -248,21 +270,34 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="tempo-dogfood-") as box:
         with open(LOG_PATH, "w", encoding="utf-8") as log:
             state = Path(box) / "session.json"
+            server_log = Path(box) / "server.log"
             port = free_port()
             base = f"http://127.0.0.1:{port}"
             command = [sys.executable, str(ROOT / "run.py"), "--port", str(port),
                        "--state", str(state), "--focus", "0.05"]
             alive = False
-            with supervised(command, log) as process:
-                if wait_until_serving(base):
-                    report.step(True, "the server starts and answers", base)
-                    golden_path(base, state, report)
-                    chaos(base, state, report)
-                else:
-                    report.step(False, "the server starts and answers",
-                                f"no answer within {START_TIMEOUT:.0f}s")
-                alive = process.poll() is None
+            with open(server_log, "w", encoding="utf-8") as sink:
+                with supervised(command, sink) as process:
+                    if wait_until_serving(base):
+                        report.step(True, "the server starts and answers", base)
+                        golden_path(base, state, report)
+                        chaos(base, port, state, report)
+                    else:
+                        report.step(False, "the server starts and answers",
+                                    f"no answer within {START_TIMEOUT:.0f}s")
+                    alive = process.poll() is None
             report.step(alive, "the server survived every hostile input")
+
+            # R6: a traceback on the server's stderr fails the run even when every
+            # request answered correctly, so the log is evidence, not decoration.
+            printed = server_log.read_text(encoding="utf-8", errors="replace")
+            log.write("--- server output ---\n" + printed + "--- steps ---\n")
+            culprit = next((line.strip() for line in printed.splitlines()
+                            if line.strip().endswith("Error")
+                            or ": [WinError" in line), "")
+            report.step(TRACEBACK_MARKER not in printed,
+                        "the server printed no traceback", culprit[:90])
+
             surface_proof(report, log)
             log.write("\n".join(report.lines) + "\n")
 
@@ -270,7 +305,7 @@ def main() -> int:
     passed = len(report.lines) - len(report.failures)
     print(f"TEMPO DOGFOOD (PRINCIPLE-015): {passed}/{len(report.lines)} steps passed")
     for failure in report.failures[:MAX_REPORT_LINES - 4]:
-        print(f"  [FAIL] {failure}")
+        print(f"  [FAIL] {printable(failure)}")
     print(f"  full log: {LOG_PATH.relative_to(ROOT).as_posix()}")
     if report.failures:
         print("Why: the product must work and hold up under hostile input before it ships.")

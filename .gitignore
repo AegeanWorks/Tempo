@@ -11,3 +11,5 @@ state/
 # Python bytecode
 __pycache__/
 *.py[cod]
+# AIKit transient state
+node_modules/

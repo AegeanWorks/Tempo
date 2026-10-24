@@ -1,6 +1,10 @@
 """Integration tests over a real socket: the JSON endpoints and the served page."""
 
+import contextlib
+import io
 import json
+import socket
+import struct
 import tempfile
 import threading
 import unittest
@@ -73,6 +77,21 @@ class HttpTest(unittest.TestCase):
         self.addCleanup(error.close)
         self.assertEqual(400, error.code)
         self.assertIn("unknown action", json.loads(error.read())["error"])
+
+    def test_a_client_that_drops_mid_request_is_not_an_error(self):
+        captured = io.StringIO()
+        with contextlib.redirect_stderr(captured):
+            probe = socket.create_connection(("127.0.0.1", self.server.server_address[1]),
+                                             timeout=TIMEOUT)
+            probe.sendall(b"GET /api/status HTTP/1.1\r\nHost: tempo\r\n")
+            probe.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER,
+                             struct.pack("ii", 1, 0))
+            probe.close()
+            # The server is single threaded, so this request only completes after it has
+            # finished dealing with the reset connection.
+            status, _, _ = self.get("/api/status")
+        self.assertEqual(200, status)
+        self.assertNotIn("Traceback", captured.getvalue())
 
     def test_unknown_paths_answer_404(self):
         for method in ("GET", "POST"):
