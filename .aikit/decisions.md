@@ -39,3 +39,17 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: A stray server left running answered a client that vanished mid-request and printed a full `ConnectionResetError` traceback, which happens whenever a browser tab closes during a poll. The dogfood runner captured the server's output but never inspected it, so PRINCIPLE-015 R6 was unenforced.
 - **Decision**: `TempoServer.handle_error` stays silent for `ConnectionResetError`, `ConnectionAbortedError` and `BrokenPipeError` and reports anything else. The dogfood runner now resets a connection mid-request as one of its hostile inputs, keeps the server's output in its own sandbox file, and fails the run when that output contains a traceback.
 - **Consequences**: A closing tab no longer looks like a fault, and a genuine unhandled error still surfaces and now fails a gate instead of scrolling past. The cost is that the runner must read the server log back, and its report is forced through ASCII so a localized OS message cannot break the console.
+
+### ADR-005: Phase transition chimes use synthetic Web Audio tones; zero external assets
+- **Date**: 2026-10-24
+- **Status**: Accepted
+- **Context**: Users need an audible signal when a focus or break phase completes without requiring visual focus on the tab. Bundling audio files increases repository size and introduces external asset dependencies.
+- **Decision**: `web/app.js` synthesizes two-tone harmonic chimes using the browser's native `AudioContext` (sine oscillators with exponential gain decay). Sound can be toggled via `#sound-button`, preference persists in `localStorage`, and the audio context is unlocked upon user gesture.
+- **Consequences**: Zero audio asset files or network calls are needed. Older browsers without Web Audio gracefully no-op.
+
+### ADR-006: Runtime interval configuration updates the validated plan and persists alongside session state
+- **Date**: 2026-10-24
+- **Status**: Accepted
+- **Context**: Changing focus or break durations previously required restarting Python with command-line flags. Users need to adjust interval durations directly from the UI.
+- **Decision**: Added `configure` action to `TempoApp` accepting `focus_seconds`, `short_break_seconds`, `long_break_seconds`, and `cycle_length`. The updated plan is validated through `PhasePlan.validated()`, returned in status snapshots, and persisted as `"plan"` in `session.json` by `SessionStore`.
+- **Consequences**: Users customize intervals live without restarting the server, and customizations persist across restarts. The schema remains backward-compatible with schema version 1.

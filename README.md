@@ -74,6 +74,9 @@ tempo/
 | **Start / Pause** | Runs or banks the current phase. Space does the same. |
 | **Skip phase** | Moves to the next phase; a skipped focus phase still counts. |
 | **Reset** | Back to a paused first focus phase, cycle count cleared. |
+| **Sound on / off** | Toggles synthesized Web Audio chimes on phase completion (zero audio assets). |
+| **Settings** | Opens interval dialog to customize focus, break, and cycle lengths live. |
+| **Analytics** | Displays today's completed focus intervals and cumulative focused time. |
 
 Flags: `--port`, `--state`, `--focus`, `--short-break`, `--long-break`, `--cycle`
 (minutes, except `--cycle`, which counts focus phases before a long break). Bad values
