@@ -66,6 +66,8 @@ tempo/
 │   └── test_http.py          <- real socket: endpoints, assets, 400s and 404s
 ├── .gitignore                <- transient state and caches excluded
 ├── README.md
+├── COMMERCIAL.md
+├── LICENSE
 └── .aikit/                   <- this project's memory: record, ledger, decisions
 ```
 
