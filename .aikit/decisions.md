@@ -53,3 +53,9 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Changing focus or break durations previously required restarting Python with command-line flags. Users need to adjust interval durations directly from the UI.
 - **Decision**: Added `configure` action to `TempoApp` accepting `focus_seconds`, `short_break_seconds`, `long_break_seconds`, and `cycle_length`. The updated plan is validated through `PhasePlan.validated()`, returned in status snapshots, and persisted as `"plan"` in `session.json` by `SessionStore`.
 - **Consequences**: Users customize intervals live without restarting the server, and customizations persist across restarts. The schema remains backward-compatible with schema version 1.
+
+## Licensing migration (agpl-final)
+
+- New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.
+- Rights holder: AegeanWorks; commercial use under ACL-1.0.
+- Counsel review of the 1.1 texts remains pending.

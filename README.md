@@ -1,6 +1,6 @@
 # tempo
 
-[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/Aegean-E/AIKit)
+[![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
 
 A focus timer you run on your own machine: one Python process, a browser page, no
 dependencies, no account and no network calls. Phases alternate focus and break, and
@@ -68,6 +68,8 @@ tempo/
 ├── README.md
 ├── COMMERCIAL.md
 ├── LICENSE
+├── LICENSES/                 <- REUSE license texts
+├── REUSE.toml                <- Machine-readable SPDX metadata
 └── .aikit/                   <- this project's memory: record, ledger, decisions
 ```
 
@@ -103,3 +105,9 @@ a style-drift finding rather than a matter of taste.
 place, so a power loss leaves the old file or the new one, never half of each. The file
 carries a schema version: a version this build does not know is refused untouched, and an
 unreadable file is moved to `session.json.corrupt` and replaced by a fresh session.
+
+> **License history:** versions up to and including `agpl-final` remain available under GNU AGPL-3.0.
+
+## 📜 License
+
+Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).
