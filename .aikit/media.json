@@ -14,67 +14,40 @@
   "layout": "wave",
   "assets": {
     "logo": {
-      "path": "assets/logo.svg",
+      "path": "assets/logo.png",
       "status": "approved",
       "commit": "",
-      "generated_at": "2026-10-28T08:47:16",
+      "generated_at": "2026-10-28T11:43:57",
       "review": {
         "status": "approved",
         "reviewer": "subagent:vision-review",
         "method": "vision",
-        "notes": "TE timer clock, distinct from chronos",
-        "score": 89,
-        "reviewed_at": "2026-10-28T08:58:22"
+        "notes": "Monogram TE matches project; legible small, unclipped, no overlaps/watermark, premium.",
+        "score": 90,
+        "reviewed_at": "2026-10-28T11:49:30"
       }
     },
     "social_preview": {
-      "path": "assets/social-preview.svg",
-      "status": "approved",
-      "commit": "",
-      "generated_at": "2026-10-28T08:47:16",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:vision-review",
-        "method": "vision",
-        "notes": "Consistent template, legible",
-        "score": 89,
-        "reviewed_at": "2026-10-28T08:58:22"
-      }
-    },
-    "social_preview_png": {
       "path": "assets/social-preview.png",
       "status": "approved",
       "commit": "",
-      "generated_at": "2026-10-28T08:47:17",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:vision-review",
-        "method": "structural",
-        "notes": "Rendered from the approved 1280x640 social SVG; exact dimensions verified.",
-        "score": null,
-        "reviewed_at": "2026-10-28T09:03:07"
-      }
-    }
-  },
-  "screenshots": [
-    {
-      "path": "assets/screenshots/2026-10-28-home.png",
-      "alt": "Tempo interface at 2026-10-28",
-      "caption": "Tempo interface captured from index.html",
-      "commit": "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
-      "taken_at": "2026-10-28",
-      "viewport": "1440x900",
-      "width": 1440,
-      "height": 900,
-      "status": "approved",
+      "generated_at": "2026-10-28T11:43:57",
       "review": {
         "status": "approved",
         "reviewer": "subagent:vision-review",
         "method": "vision",
-        "notes": "Real timer UI showing 25:00, non-blank",
-        "score": 90,
-        "reviewed_at": "2026-10-28T08:58:22"
+        "notes": "Strong hierarchy; legible, unclipped; premium card, no watermark.",
+        "score": 89,
+        "reviewed_at": "2026-10-28T11:49:30"
       }
+    },
+    "artwork": {
+      "path": "assets/artwork.jpg",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-10-28T11:43:57",
+      "review": null
     }
-  ]
+  },
+  "screenshots": []
 }
