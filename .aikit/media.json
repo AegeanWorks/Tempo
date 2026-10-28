@@ -14,40 +14,20 @@
   "layout": "wave",
   "assets": {
     "logo": {
-      "path": "assets/logo.png",
-      "status": "approved",
-      "commit": "",
-      "generated_at": "2026-10-28T13:53:43",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:brand-review",
-        "method": "vision",
-        "notes": "TE monogram badge clean. PRODUCTIVITY eyebrow fits focus timer web app. Tempo in title case, well-spaced, unclipped. Stopwatch/timer imagery fits focus timer theme. No footer.",
-        "score": 88,
-        "reviewed_at": "2026-10-28T14:00:02"
-      }
-    },
-    "social_preview": {
-      "path": "assets/social-preview.png",
-      "status": "approved",
-      "commit": "",
-      "generated_at": "2026-10-28T13:53:43",
-      "review": {
-        "status": "approved",
-        "reviewer": "subagent:brand-review",
-        "method": "vision",
-        "notes": "Focus timer web app; tagline 'A calm focus timer for deep work.' Clean dark card, no clipping; chips (browser, focus timer, local first) and URL readable; target/timer imagery fits focus theme.",
-        "score": 93,
-        "reviewed_at": "2026-10-28T14:00:02"
-      }
-    },
-    "artwork": {
-      "path": "assets/artwork.jpg",
+      "path": "assets/logo.jpg",
       "status": "pending_review",
       "commit": "",
-      "generated_at": "2026-10-28T13:34:41",
+      "generated_at": "2026-10-28T16:43:00",
+      "review": null
+    },
+    "social_preview": {
+      "path": "assets/social-preview.jpg",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-10-28T16:43:00",
       "review": null
     }
   },
-  "screenshots": []
+  "screenshots": [],
+  "model": "community/scriptsnsenses-sys/flux-2-dev-free"
 }
