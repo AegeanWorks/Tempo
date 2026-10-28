@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "name": "tempo",
+  "repo": "Tempo",
+  "has_ui": true,
+  "ui_kind": "web",
+  "palette": [
+    "#07111f",
+    "#0e2a47",
+    "#a78bfa",
+    "#e2f8ff"
+  ],
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:51",
+      "review": {
+        "status": "approved",
+        "reviewer": "subagent:vision-review",
+        "method": "vision",
+        "notes": "TE monogram in lavender, dark teal, unclipped.",
+        "score": 93,
+        "reviewed_at": "2026-10-28T08:10:44"
+      }
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "approved",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:51",
+      "review": {
+        "status": "approved",
+        "reviewer": "subagent:vision-review",
+        "method": "vision",
+        "notes": "TE icon, title, focus tool description, WEB tag, coherent.",
+        "score": 93,
+        "reviewed_at": "2026-10-28T08:10:44"
+      }
+    },
+    "social_preview_png": {
+      "path": "assets/social-preview.png",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-10-28T08:02:58",
+      "review": null
+    }
+  },
+  "screenshots": [
+    {
+      "path": "assets/screenshots/2026-10-28-home.png",
+      "alt": "Tempo interface at 2026-10-28",
+      "caption": "Tempo interface captured from index.html",
+      "commit": "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
+      "taken_at": "2026-10-28",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "subagent:vision-review",
+        "method": "vision",
+        "notes": "2026-10-28-home.png \u2014 real timer modal UI '25:00', non-blank, legible.",
+        "score": 90,
+        "reviewed_at": "2026-10-28T08:10:44"
+      }
+    }
+  ]
+}
