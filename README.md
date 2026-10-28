@@ -114,11 +114,3 @@ unreadable file is moved to `session.json.corrupt` and replaced by a fresh sessi
 ## 📜 License
 
 Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).
-
-<!-- aegean:screenshots:start -->
-## Screenshots
-
-<a href="https://github.com/AegeanWorks/Tempo/commit/aadcbde"><img src="assets/screenshots/2026-10-28-home.png" alt="Tempo interface at 2026-10-28"></a>
-
-*Tempo interface captured from index.html* · commit `aadcbde` · 2026-10-28
-<!-- aegean:screenshots:end -->
