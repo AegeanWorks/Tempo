@@ -16,17 +16,17 @@
   "ui_source": "detected",
   "topics": [
     "aikit",
+    "source-available",
+    "aegean-license",
+    "commercial-license",
     "browser",
     "focus-timer",
     "local-first",
     "pomodoro",
-    "productivity",
     "python",
     "timer",
     "zero-dependency",
-    "source-available",
     "aegeanworks",
-    "software",
     "time-management",
     "user-interface",
     "web-app",
@@ -66,5 +66,10 @@
     "productivity-tool",
     "web-app",
     "zero-dependency"
+  ],
+  "license_topics": [
+    "source-available",
+    "aegean-license",
+    "commercial-license"
   ]
 }
