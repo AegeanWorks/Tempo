@@ -17,35 +17,35 @@
       "path": "assets/logo.png",
       "status": "approved",
       "commit": "",
-      "generated_at": "2026-10-28T11:43:57",
+      "generated_at": "2026-10-28T13:53:43",
       "review": {
         "status": "approved",
-        "reviewer": "subagent:vision-review",
+        "reviewer": "subagent:brand-review",
         "method": "vision",
-        "notes": "Monogram TE matches project; legible small, unclipped, no overlaps/watermark, premium.",
-        "score": 90,
-        "reviewed_at": "2026-10-28T11:49:30"
+        "notes": "TE monogram badge clean. PRODUCTIVITY eyebrow fits focus timer web app. Tempo in title case, well-spaced, unclipped. Stopwatch/timer imagery fits focus timer theme. No footer.",
+        "score": 88,
+        "reviewed_at": "2026-10-28T14:00:02"
       }
     },
     "social_preview": {
       "path": "assets/social-preview.png",
       "status": "approved",
       "commit": "",
-      "generated_at": "2026-10-28T11:43:57",
+      "generated_at": "2026-10-28T13:53:43",
       "review": {
         "status": "approved",
-        "reviewer": "subagent:vision-review",
+        "reviewer": "subagent:brand-review",
         "method": "vision",
-        "notes": "Strong hierarchy; legible, unclipped; premium card, no watermark.",
-        "score": 89,
-        "reviewed_at": "2026-10-28T11:49:30"
+        "notes": "Focus timer web app; tagline 'A calm focus timer for deep work.' Clean dark card, no clipping; chips (browser, focus timer, local first) and URL readable; target/timer imagery fits focus theme.",
+        "score": 93,
+        "reviewed_at": "2026-10-28T14:00:02"
       }
     },
     "artwork": {
       "path": "assets/artwork.jpg",
       "status": "pending_review",
       "commit": "",
-      "generated_at": "2026-10-28T11:43:57",
+      "generated_at": "2026-10-28T13:34:41",
       "review": null
     }
   },
