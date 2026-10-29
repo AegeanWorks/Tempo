@@ -5,22 +5,12 @@
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1793295582.4373455,
+    "updated_at": 1793295634.107994,
     "owner": "opencode:reforge-fixes",
     "started_by": "opencode:reforge-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tempo-reforge-fixes-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tempo-reforge-fixes-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1793293808.3030689,
-      "timestamp_str": "2026-10-29 20:10:08",
-      "agent": "opencode:reforge-fixes"
-    },
     {
       "task_id": "tempo-reforge-fixes-v2",
       "phase": "planning",
@@ -249,6 +239,17 @@
       "status": "in_progress",
       "timestamp": 1793295582.4373455,
       "timestamp_str": "2026-10-29 20:39:42",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v5",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[1/1] Delivery: ignore local reforge review packets so --strict can describe a clean tree; checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793295634.107994,
+      "timestamp_str": "2026-10-29 20:40:34",
       "agent": "opencode:reforge-fixes"
     }
   ]
