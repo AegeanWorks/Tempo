@@ -12,26 +12,6 @@
   },
   "checkpoints": [
     {
-      "task_id": "tempo-audit-hardening-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tempo-audit-hardening-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792833207.9767895,
-      "timestamp_str": "2026-10-24 12:13:27"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 1",
-      "phase_num": 3,
-      "description": "Reforge stage 1: window 3, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793292623.7882369,
-      "timestamp_str": "2026-10-29 19:50:23",
-      "agent": "opencode"
-    },
-    {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 2",
       "phase_num": 3,
@@ -251,6 +231,28 @@
       "timestamp": 1793293855.0744588,
       "timestamp_str": "2026-10-29 20:10:55",
       "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 12",
+      "phase_num": 3,
+      "description": "Reforge stage 12: window 30, 1 commit(s), 4 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293878.8426359,
+      "timestamp_str": "2026-10-29 20:11:18",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 12",
+      "phase_num": 3,
+      "description": "Reforge stage 12: run stopped at stage 12; resume it with `reforge resume`",
+      "files_affected": [],
+      "status": "suspended",
+      "timestamp": 1793293906.5625043,
+      "timestamp_str": "2026-10-29 20:11:46",
+      "agent": "opencode"
     }
   ]
 }
