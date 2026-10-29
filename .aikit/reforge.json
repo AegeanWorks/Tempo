@@ -9,8 +9,8 @@
       "start": 3,
       "step": 3,
       "stop": null,
-      "stage": 13,
-      "window": 34,
+      "stage": 14,
+      "window": 36,
       "audited_commits": [
         "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
         "89e4be880ad5074f370a050d182c439710101ffb",
@@ -45,16 +45,20 @@
         "04518677cc10f6d047d335d631984b3fef0d12ff",
         "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
         "3602f76e6da00a01a5204d27451d19d1372baee5",
-        "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+        "788a17f0d8779f2ae63801dd98f29b4f5763d657",
+        "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+        "e244884674c9f4bc631acbdbb176a04a1ec9060d"
       ],
       "status": "stopped",
       "created": "2026-10-29T19:50:20",
-      "updated": "2026-10-29T20:32:02",
+      "updated": "2026-10-29T20:36:31",
       "last_audit": {
         "run": "run-1",
-        "stage": 13,
-        "window": 34,
+        "stage": 14,
+        "window": 36,
         "commits": [
+          "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+          "e244884674c9f4bc631acbdbb176a04a1ec9060d",
           "04518677cc10f6d047d335d631984b3fef0d12ff",
           "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
           "3602f76e6da00a01a5204d27451d19d1372baee5",
@@ -91,10 +95,8 @@
           "1990fc1d5903ea42b8624997cfcaf8b0908c3d02"
         ],
         "new_commits": [
-          "04518677cc10f6d047d335d631984b3fef0d12ff",
-          "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
-          "3602f76e6da00a01a5204d27451d19d1372baee5",
-          "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+          "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+          "e244884674c9f4bc631acbdbb176a04a1ec9060d"
         ],
         "prior_commits": [
           "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
@@ -126,7 +128,11 @@
           "6dd68162a03bcdc76d477d7d23e58aeef284c785",
           "1990fc1d5903ea42b8624997cfcaf8b0908c3d02",
           "cd1f58846e8693264e0971c84c9d415ef903ecee",
-          "7eae0391c867da7281072953f93ccd29ef2be8f0"
+          "7eae0391c867da7281072953f93ccd29ef2be8f0",
+          "04518677cc10f6d047d335d631984b3fef0d12ff",
+          "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+          "3602f76e6da00a01a5204d27451d19d1372baee5",
+          "788a17f0d8779f2ae63801dd98f29b4f5763d657"
         ],
         "findings": [],
         "repairs": [],
@@ -137,17 +143,17 @@
           "rejected": [],
           "files": [
             ".aikit/codebase_map.md",
-            "LICENSE",
-            "LICENSES/LicenseRef-AL-1.1.txt",
+            ".aikit/decisions.md",
+            "README.md",
             "tempo/server.py",
             "tests/test_app.py"
           ],
-          "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-13-04518677cc10.md",
+          "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-14-d5de62be47ef.md",
           "redacted": 0,
           "reason": "the answer held no findings",
           "coverage": {
-            "reported": 16,
-            "total": 16,
+            "reported": 9,
+            "total": 9,
             "missing": [],
             "unknown": []
           },
@@ -156,7 +162,7 @@
         "skipped": [],
         "tests": {},
         "gates": {},
-        "timestamp": "2026-10-29T20:31:32",
+        "timestamp": "2026-10-29T20:36:08",
         "dirty_targets": []
       },
       "history": [
@@ -1565,12 +1571,125 @@
           "gates": {},
           "timestamp": "2026-10-29T20:31:32",
           "dirty_targets": []
+        },
+        {
+          "run": "run-1",
+          "stage": 14,
+          "window": 36,
+          "commits": [
+            "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+            "e244884674c9f4bc631acbdbb176a04a1ec9060d",
+            "04518677cc10f6d047d335d631984b3fef0d12ff",
+            "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+            "3602f76e6da00a01a5204d27451d19d1372baee5",
+            "788a17f0d8779f2ae63801dd98f29b4f5763d657",
+            "7eae0391c867da7281072953f93ccd29ef2be8f0",
+            "cd1f58846e8693264e0971c84c9d415ef903ecee",
+            "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
+            "89e4be880ad5074f370a050d182c439710101ffb",
+            "3102691730780d2e66429dfa95cc49d625a65332",
+            "f0bc6a3dd1aacbe391d0e820e3c85321652922ad",
+            "f6999e74750b9d6c0eafe1eeda634d8a7b80e5df",
+            "c3ec8d3436e0f9b2bb9135f562e9c93deb267cf1",
+            "77523079fe795a1843abcb158e8547023cf355b2",
+            "8cd420af9dba64b0a4df9ae5173cbc343c078dc5",
+            "597186446adaa8ec63d0f30573332c8773d3b262",
+            "1c10bd38186f26739c657dbec0d60566d92832c2",
+            "969d718c7d1efe7a25c0fbbe5521231c6d0654db",
+            "136ef711e275d5d3c0194ed485bdf5bf250b3859",
+            "e47c455e3fdf500548e871a1731774cf77c3c9fd",
+            "7edbf0cd1a32f497da55d5c4de237a4f78537a6b",
+            "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
+            "eda1b049361838c18b9e566dcd4f61bce7938512",
+            "48742e7e3a07a795816d0ff2f625c198a5fd8b28",
+            "a910e578776a56f78ceba99d6d3222e5ba3fb6ed",
+            "c1416b8d68592d44b735baa660b8dca7bb557b46",
+            "304c90c9f6d25fd2fced78d0adcd5633886d63fe",
+            "bf8641625722926e7eed4fd48d8db2de177944fd",
+            "653278dba17d1b5ae47df4b764f00c92330d2024",
+            "ca07391b134ea193e3b33e07c564a8e69d54521b",
+            "303eabe7be8fe772765a2406af5f0b2b0d78f8c4",
+            "8b110c0b15c1dd0773d5ca4b33e8de4a7c2a1225",
+            "b8a3cda13c39208f1e27221df78b0446f9205cb3",
+            "6dd68162a03bcdc76d477d7d23e58aeef284c785",
+            "1990fc1d5903ea42b8624997cfcaf8b0908c3d02"
+          ],
+          "new_commits": [
+            "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+            "e244884674c9f4bc631acbdbb176a04a1ec9060d"
+          ],
+          "prior_commits": [
+            "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
+            "89e4be880ad5074f370a050d182c439710101ffb",
+            "3102691730780d2e66429dfa95cc49d625a65332",
+            "f0bc6a3dd1aacbe391d0e820e3c85321652922ad",
+            "f6999e74750b9d6c0eafe1eeda634d8a7b80e5df",
+            "c3ec8d3436e0f9b2bb9135f562e9c93deb267cf1",
+            "77523079fe795a1843abcb158e8547023cf355b2",
+            "8cd420af9dba64b0a4df9ae5173cbc343c078dc5",
+            "597186446adaa8ec63d0f30573332c8773d3b262",
+            "1c10bd38186f26739c657dbec0d60566d92832c2",
+            "969d718c7d1efe7a25c0fbbe5521231c6d0654db",
+            "136ef711e275d5d3c0194ed485bdf5bf250b3859",
+            "e47c455e3fdf500548e871a1731774cf77c3c9fd",
+            "7edbf0cd1a32f497da55d5c4de237a4f78537a6b",
+            "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
+            "eda1b049361838c18b9e566dcd4f61bce7938512",
+            "48742e7e3a07a795816d0ff2f625c198a5fd8b28",
+            "a910e578776a56f78ceba99d6d3222e5ba3fb6ed",
+            "c1416b8d68592d44b735baa660b8dca7bb557b46",
+            "304c90c9f6d25fd2fced78d0adcd5633886d63fe",
+            "bf8641625722926e7eed4fd48d8db2de177944fd",
+            "653278dba17d1b5ae47df4b764f00c92330d2024",
+            "ca07391b134ea193e3b33e07c564a8e69d54521b",
+            "303eabe7be8fe772765a2406af5f0b2b0d78f8c4",
+            "8b110c0b15c1dd0773d5ca4b33e8de4a7c2a1225",
+            "b8a3cda13c39208f1e27221df78b0446f9205cb3",
+            "6dd68162a03bcdc76d477d7d23e58aeef284c785",
+            "1990fc1d5903ea42b8624997cfcaf8b0908c3d02",
+            "cd1f58846e8693264e0971c84c9d415ef903ecee",
+            "7eae0391c867da7281072953f93ccd29ef2be8f0",
+            "04518677cc10f6d047d335d631984b3fef0d12ff",
+            "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+            "3602f76e6da00a01a5204d27451d19d1372baee5",
+            "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+          ],
+          "findings": [],
+          "repairs": [],
+          "counts": {},
+          "reviewed": 5,
+          "review": {
+            "status": "reviewed",
+            "rejected": [],
+            "files": [
+              ".aikit/codebase_map.md",
+              ".aikit/decisions.md",
+              "README.md",
+              "tempo/server.py",
+              "tests/test_app.py"
+            ],
+            "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-14-d5de62be47ef.md",
+            "redacted": 0,
+            "reason": "the answer held no findings",
+            "coverage": {
+              "reported": 9,
+              "total": 9,
+              "missing": [],
+              "unknown": []
+            },
+            "findings": []
+          },
+          "skipped": [],
+          "tests": {},
+          "gates": {},
+          "timestamp": "2026-10-29T20:36:08",
+          "dirty_targets": []
         }
       ]
     }
   ],
-  "stage": 13,
-  "window": 34,
+  "stage": 14,
+  "window": 36,
   "audited_commits": [
     "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
     "89e4be880ad5074f370a050d182c439710101ffb",
@@ -1605,13 +1724,17 @@
     "04518677cc10f6d047d335d631984b3fef0d12ff",
     "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
     "3602f76e6da00a01a5204d27451d19d1372baee5",
-    "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+    "788a17f0d8779f2ae63801dd98f29b4f5763d657",
+    "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+    "e244884674c9f4bc631acbdbb176a04a1ec9060d"
   ],
   "last_audit": {
     "run": "run-1",
-    "stage": 13,
-    "window": 34,
+    "stage": 14,
+    "window": 36,
     "commits": [
+      "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+      "e244884674c9f4bc631acbdbb176a04a1ec9060d",
       "04518677cc10f6d047d335d631984b3fef0d12ff",
       "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
       "3602f76e6da00a01a5204d27451d19d1372baee5",
@@ -1648,10 +1771,8 @@
       "1990fc1d5903ea42b8624997cfcaf8b0908c3d02"
     ],
     "new_commits": [
-      "04518677cc10f6d047d335d631984b3fef0d12ff",
-      "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
-      "3602f76e6da00a01a5204d27451d19d1372baee5",
-      "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+      "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+      "e244884674c9f4bc631acbdbb176a04a1ec9060d"
     ],
     "prior_commits": [
       "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
@@ -1683,7 +1804,11 @@
       "6dd68162a03bcdc76d477d7d23e58aeef284c785",
       "1990fc1d5903ea42b8624997cfcaf8b0908c3d02",
       "cd1f58846e8693264e0971c84c9d415ef903ecee",
-      "7eae0391c867da7281072953f93ccd29ef2be8f0"
+      "7eae0391c867da7281072953f93ccd29ef2be8f0",
+      "04518677cc10f6d047d335d631984b3fef0d12ff",
+      "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+      "3602f76e6da00a01a5204d27451d19d1372baee5",
+      "788a17f0d8779f2ae63801dd98f29b4f5763d657"
     ],
     "findings": [],
     "repairs": [],
@@ -1694,17 +1819,17 @@
       "rejected": [],
       "files": [
         ".aikit/codebase_map.md",
-        "LICENSE",
-        "LICENSES/LicenseRef-AL-1.1.txt",
+        ".aikit/decisions.md",
+        "README.md",
         "tempo/server.py",
         "tests/test_app.py"
       ],
-      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-13-04518677cc10.md",
+      "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-14-d5de62be47ef.md",
       "redacted": 0,
       "reason": "the answer held no findings",
       "coverage": {
-        "reported": 16,
-        "total": 16,
+        "reported": 9,
+        "total": 9,
         "missing": [],
         "unknown": []
       },
@@ -1713,7 +1838,7 @@
     "skipped": [],
     "tests": {},
     "gates": {},
-    "timestamp": "2026-10-29T20:31:32",
+    "timestamp": "2026-10-29T20:36:08",
     "dirty_targets": []
   },
   "history": [
@@ -3121,6 +3246,119 @@
       "tests": {},
       "gates": {},
       "timestamp": "2026-10-29T20:31:32",
+      "dirty_targets": []
+    },
+    {
+      "run": "run-1",
+      "stage": 14,
+      "window": 36,
+      "commits": [
+        "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+        "e244884674c9f4bc631acbdbb176a04a1ec9060d",
+        "04518677cc10f6d047d335d631984b3fef0d12ff",
+        "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+        "3602f76e6da00a01a5204d27451d19d1372baee5",
+        "788a17f0d8779f2ae63801dd98f29b4f5763d657",
+        "7eae0391c867da7281072953f93ccd29ef2be8f0",
+        "cd1f58846e8693264e0971c84c9d415ef903ecee",
+        "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
+        "89e4be880ad5074f370a050d182c439710101ffb",
+        "3102691730780d2e66429dfa95cc49d625a65332",
+        "f0bc6a3dd1aacbe391d0e820e3c85321652922ad",
+        "f6999e74750b9d6c0eafe1eeda634d8a7b80e5df",
+        "c3ec8d3436e0f9b2bb9135f562e9c93deb267cf1",
+        "77523079fe795a1843abcb158e8547023cf355b2",
+        "8cd420af9dba64b0a4df9ae5173cbc343c078dc5",
+        "597186446adaa8ec63d0f30573332c8773d3b262",
+        "1c10bd38186f26739c657dbec0d60566d92832c2",
+        "969d718c7d1efe7a25c0fbbe5521231c6d0654db",
+        "136ef711e275d5d3c0194ed485bdf5bf250b3859",
+        "e47c455e3fdf500548e871a1731774cf77c3c9fd",
+        "7edbf0cd1a32f497da55d5c4de237a4f78537a6b",
+        "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
+        "eda1b049361838c18b9e566dcd4f61bce7938512",
+        "48742e7e3a07a795816d0ff2f625c198a5fd8b28",
+        "a910e578776a56f78ceba99d6d3222e5ba3fb6ed",
+        "c1416b8d68592d44b735baa660b8dca7bb557b46",
+        "304c90c9f6d25fd2fced78d0adcd5633886d63fe",
+        "bf8641625722926e7eed4fd48d8db2de177944fd",
+        "653278dba17d1b5ae47df4b764f00c92330d2024",
+        "ca07391b134ea193e3b33e07c564a8e69d54521b",
+        "303eabe7be8fe772765a2406af5f0b2b0d78f8c4",
+        "8b110c0b15c1dd0773d5ca4b33e8de4a7c2a1225",
+        "b8a3cda13c39208f1e27221df78b0446f9205cb3",
+        "6dd68162a03bcdc76d477d7d23e58aeef284c785",
+        "1990fc1d5903ea42b8624997cfcaf8b0908c3d02"
+      ],
+      "new_commits": [
+        "d5de62be47ef0e9f210eadb658f2fb3c4dc318c2",
+        "e244884674c9f4bc631acbdbb176a04a1ec9060d"
+      ],
+      "prior_commits": [
+        "2b9892d5bfdb7e44c81f12ebfaec04e9a5538184",
+        "89e4be880ad5074f370a050d182c439710101ffb",
+        "3102691730780d2e66429dfa95cc49d625a65332",
+        "f0bc6a3dd1aacbe391d0e820e3c85321652922ad",
+        "f6999e74750b9d6c0eafe1eeda634d8a7b80e5df",
+        "c3ec8d3436e0f9b2bb9135f562e9c93deb267cf1",
+        "77523079fe795a1843abcb158e8547023cf355b2",
+        "8cd420af9dba64b0a4df9ae5173cbc343c078dc5",
+        "597186446adaa8ec63d0f30573332c8773d3b262",
+        "1c10bd38186f26739c657dbec0d60566d92832c2",
+        "969d718c7d1efe7a25c0fbbe5521231c6d0654db",
+        "136ef711e275d5d3c0194ed485bdf5bf250b3859",
+        "e47c455e3fdf500548e871a1731774cf77c3c9fd",
+        "7edbf0cd1a32f497da55d5c4de237a4f78537a6b",
+        "aadcbde785db82d143a1b3d4d26ce8fc8a4964ed",
+        "eda1b049361838c18b9e566dcd4f61bce7938512",
+        "48742e7e3a07a795816d0ff2f625c198a5fd8b28",
+        "a910e578776a56f78ceba99d6d3222e5ba3fb6ed",
+        "c1416b8d68592d44b735baa660b8dca7bb557b46",
+        "304c90c9f6d25fd2fced78d0adcd5633886d63fe",
+        "bf8641625722926e7eed4fd48d8db2de177944fd",
+        "653278dba17d1b5ae47df4b764f00c92330d2024",
+        "ca07391b134ea193e3b33e07c564a8e69d54521b",
+        "303eabe7be8fe772765a2406af5f0b2b0d78f8c4",
+        "8b110c0b15c1dd0773d5ca4b33e8de4a7c2a1225",
+        "b8a3cda13c39208f1e27221df78b0446f9205cb3",
+        "6dd68162a03bcdc76d477d7d23e58aeef284c785",
+        "1990fc1d5903ea42b8624997cfcaf8b0908c3d02",
+        "cd1f58846e8693264e0971c84c9d415ef903ecee",
+        "7eae0391c867da7281072953f93ccd29ef2be8f0",
+        "04518677cc10f6d047d335d631984b3fef0d12ff",
+        "b421c8c8b9fafc4fe1312aeae43b07c020685c10",
+        "3602f76e6da00a01a5204d27451d19d1372baee5",
+        "788a17f0d8779f2ae63801dd98f29b4f5763d657"
+      ],
+      "findings": [],
+      "repairs": [],
+      "counts": {},
+      "reviewed": 5,
+      "review": {
+        "status": "reviewed",
+        "rejected": [],
+        "files": [
+          ".aikit/codebase_map.md",
+          ".aikit/decisions.md",
+          "README.md",
+          "tempo/server.py",
+          "tests/test_app.py"
+        ],
+        "packet": "C:\\Users\\Yunus-Emre\\Desktop\\portable_agent_kit\\projects\\tempo\\.aikit\\reforge.reviews\\stage-run-1-14-d5de62be47ef.md",
+        "redacted": 0,
+        "reason": "the answer held no findings",
+        "coverage": {
+          "reported": 9,
+          "total": 9,
+          "missing": [],
+          "unknown": []
+        },
+        "findings": []
+      },
+      "skipped": [],
+      "tests": {},
+      "gates": {},
+      "timestamp": "2026-10-29T20:36:08",
       "dirty_targets": []
     }
   ]
