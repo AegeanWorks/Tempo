@@ -30,8 +30,11 @@ def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, obje
     except (OSError, OverflowError, ValueError):
         today_count = state.completed_focus
         today_seconds = state.completed_focus * plan.focus_seconds
-    total_seconds = sum(plan.focus_seconds if seconds is None else seconds
-                        for _, seconds in state.history)
+    if state.history:
+        total_seconds = sum(plan.focus_seconds if seconds is None else seconds
+                            for _, seconds in state.history)
+    else:
+        total_seconds = state.completed_focus * plan.focus_seconds
     return {
         "phase": phase.kind,
         "phase_index": state.phase_index,

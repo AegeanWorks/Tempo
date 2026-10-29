@@ -115,6 +115,13 @@ class SnapshotTest(unittest.TestCase):
         self.assertEqual(10, payload["today_focus_seconds"])
         self.assertEqual(10, payload["total_focus_seconds"])
 
+    def test_snapshot_without_history_keeps_the_completed_total(self):
+        state = SessionState(phase_index=0, running=False, completed_focus=2)
+        payload = snapshot(state, SHORT_PLAN, 1700000000.0)
+        self.assertEqual(0, payload["today_focus_count"])
+        self.assertEqual(0, payload["today_focus_seconds"])
+        self.assertEqual(20, payload["total_focus_seconds"])
+
     def test_remaining_never_goes_negative(self):
         stuck = SessionState(phase_index=0, running=False, spent_seconds=99.0)
         self.assertEqual(0, snapshot(stuck, SHORT_PLAN, 0.0)["remaining_seconds"])

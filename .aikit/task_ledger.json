@@ -1,65 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tempo-reforge-fixes-v1",
+    "task_id": "tempo-reforge-fixes-v2",
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1793293643.410065,
+    "updated_at": 1793293855.0744588,
     "owner": "opencode:reforge-fixes",
     "started_by": "opencode:reforge-fixes",
     "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tempo-enhancements-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[2/4] [milestone 1/3] Added Web Audio API synthetic chime on phase change and toggle button; UI contract verified; dogfood and all 31 tests pass; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792832034.585469,
-      "timestamp_str": "2026-10-24 11:53:54"
-    },
-    {
-      "task_id": "tempo-enhancements-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[3/4] [milestone 2/3] Backend interval configuration action, plan persistence, and focus history analytics; 35 tests pass, 5/5 gates pass; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792832354.645952,
-      "timestamp_str": "2026-10-24 11:59:14"
-    },
-    {
-      "task_id": "tempo-enhancements-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[4/4] [milestone 3/3] Settings dialog for configurable intervals and session analytics in UI; 35 tests, dogfood 23/23, 5/5 gates; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792832619.0510411,
-      "timestamp_str": "2026-10-24 12:03:39"
-    },
-    {
-      "task_id": "tempo-enhancements-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tempo-enhancements-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792832713.811995,
-      "timestamp_str": "2026-10-24 12:05:13"
-    },
-    {
-      "task_id": "tempo-audit-hardening-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Audit & hardening: HTTP configure integration test, strict input validation, escape key & form submit fixes; 37 tests, 23/23 dogfood, 5/5 gates; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792833203.3055656,
-      "timestamp_str": "2026-10-24 12:13:23"
-    },
     {
       "task_id": "tempo-audit-hardening-v1",
       "phase": "completed",
@@ -239,6 +190,66 @@
       "status": "in_progress",
       "timestamp": 1793293643.410065,
       "timestamp_str": "2026-10-29 20:07:23",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: run resumed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293669.0504255,
+      "timestamp_str": "2026-10-29 20:07:49",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 11",
+      "phase_num": 3,
+      "description": "Reforge stage 11: window 29, 1 commit(s), 13 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293679.62342,
+      "timestamp_str": "2026-10-29 20:07:59",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v1",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'tempo-reforge-fixes-v1' completed successfully.",
+      "status": "completed",
+      "timestamp": 1793293808.3030689,
+      "timestamp_str": "2026-10-29 20:10:08",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v2",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/1] Preserve the all-time focus total for sessions that predate history, with a failing-first test",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293814.372877,
+      "timestamp_str": "2026-10-29 20:10:14",
+      "agent": "opencode:reforge-fixes",
+      "impact_assessment": {
+        "why": "Reforge stage 11 found that the analytics change sums an empty history to zero, so a pre-analytics session with completed_focus > 0 loses its all-time total.",
+        "benefits": "Upgraded session files keep a sensible total, and the backward-compatibility promise in ADR-007 is covered by a regression test.",
+        "risks": "contract: status payload total_focus_seconds keeps its meaning for history-bearing sessions; dependency: none; concurrency: snapshot stays read-only; state: only the empty-history fallback changes, no stored format.",
+        "mitigation": "Fall back to completed_focus * focus_seconds only when history is empty, add the failing-first test, and rerun the full gates before committing."
+      }
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v2",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[1/1] Delivery: empty-history total fallback plus failing-first regression test; 47 tests pass; Phase 4 gates 5/5 (test, dogfood, hygiene, guidelines, secrets); checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293855.0744588,
+      "timestamp_str": "2026-10-29 20:10:55",
       "agent": "opencode:reforge-fixes"
     }
   ]

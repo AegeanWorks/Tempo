@@ -9,8 +9,8 @@
 - **Total Python Modules**: `16`
 - **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `82`
-- **Total Source Lines**: `1614`
+- **Total Class Methods**: `83`
+- **Total Source Lines**: `1624`
 
 ---
 
@@ -99,7 +99,7 @@
 ### [`tempo/status.py`](tempo/status.py)
 > *The read model the UI renders.*
 
-**Size**: `51` lines (`2067` bytes)
+**Size**: `54` lines (`2174` bytes)
 
 **Functions:**
 - `def snapshot(state, plan, now)` - *A settled session as the flat payload `GET /api/status` returns.*
@@ -186,7 +186,7 @@
 ### [`tests/test_session.py`](tests/test_session.py)
 > *Unit tests for the phase plan, session transitions and the status read model.*
 
-**Size**: `124` lines (`5754` bytes)
+**Size**: `131` lines (`6143` bytes)
 
 **Classes:**
 - `class PhasePlanTest`
@@ -206,6 +206,7 @@
   - Method `.test_snapshot_includes_plan_durations_and_analytics()`
   - Method `.test_snapshot_keeps_recorded_duration_when_the_plan_changes()`
   - Method `.test_legacy_history_without_a_duration_uses_the_current_plan()`
+  - Method `.test_snapshot_without_history_keeps_the_completed_total()`
   - Method `.test_remaining_never_goes_negative()`
 
 ---
