@@ -53,6 +53,15 @@ class TempoAppTest(unittest.TestCase):
         self.assertEqual(1, status["completed_focus"])
         self.assertEqual(SHORT_BREAK, self.app.status()["phase"])
 
+    def test_a_clock_that_moved_backwards_restarts_the_run_at_now(self):
+        self.app.apply("toggle")
+        self.clock.now -= 500.0
+        status = self.app.status()
+        self.assertTrue(status["running"])
+        self.assertEqual(10, status["remaining_seconds"])
+        self.clock.now += 1.0
+        self.assertEqual(9, self.app.status()["remaining_seconds"])
+
     def test_skip_moves_on_and_reset_starts_over(self):
         skipped = self.app.apply("skip")
         self.assertEqual(SHORT_BREAK, skipped["phase"])

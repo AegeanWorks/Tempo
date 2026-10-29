@@ -1,48 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tempo-reforge-fixes-v2",
+    "task_id": "tempo-reforge-fixes-v3",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793293855.0744588,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793295058.2419453,
     "owner": "opencode:reforge-fixes",
     "started_by": "opencode:reforge-fixes",
-    "continuations": [],
-    "completed_at": 1793293924.288146
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 3",
-      "phase_num": 3,
-      "description": "Reforge stage 3: window 9, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 4 binary not analysed",
-      "files_affected": [
-        "assets/logo.jpg",
-        "assets/logo.png",
-        "assets/social-preview.jpg",
-        "assets/social-preview.png"
-      ],
-      "status": "in_progress",
-      "timestamp": 1793292693.039711,
-      "timestamp_str": "2026-10-29 19:51:33",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 4",
-      "phase_num": 3,
-      "description": "Reforge stage 4: window 12, 3 commit(s), 4 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 3 binary not analysed",
-      "files_affected": [
-        "assets/artwork.jpg",
-        "assets/logo.png",
-        "assets/social-preview.png"
-      ],
-      "status": "in_progress",
-      "timestamp": 1793292717.807691,
-      "timestamp_str": "2026-10-29 19:51:57",
-      "agent": "opencode"
-    },
     {
       "task_id": "reforge:run-1",
       "phase": "reforge stage 5",
@@ -252,6 +220,34 @@
       "status": "completed",
       "timestamp": 1793293924.2881482,
       "timestamp_str": "2026-10-29 20:12:04",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v3",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/2] Close the remaining reforge findings: canonical license links and a clock-rewind guard for a running timer",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793294992.9869876,
+      "timestamp_str": "2026-10-29 20:29:52",
+      "agent": "opencode:reforge-fixes",
+      "impact_assessment": {
+        "why": "Reforge stage 6 found the license points at local CLA/ACL paths that do not exist; stage 10 found a persisted monotonic clock that freezes a running timer after a reboot.",
+        "benefits": "The license text resolves to the canonical licensing repository, and a clock that moved backwards restarts the current run instead of stalling it; both get regression coverage.",
+        "risks": "contract: license prose and TempoApp's load path change; dependency: none; concurrency: the server stays single threaded; state: the guard rewrites started_at only when it is ahead of now, with no schema change.",
+        "mitigation": "Use the canonical upstream repository links, keep the AL-1.1 text otherwise intact, add a failing-first app test, run all gates, then audit the commit with reforge."
+      }
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v3",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/2] Delivery: canonical license links, clock-rewind guard with a failing-first test, 48 tests pass; Phase 4 gates 5/5 (test, dogfood, hygiene, guidelines, secrets); checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793295058.2419453,
+      "timestamp_str": "2026-10-29 20:30:58",
       "agent": "opencode:reforge-fixes"
     }
   ]

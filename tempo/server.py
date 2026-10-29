@@ -10,14 +10,14 @@ PRINCIPLE-009, PRINCIPLE-010, PRINCIPLE-011, PRINCIPLE-013.
 
 import json
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Callable, Dict, Optional, Tuple
 from urllib.parse import urlparse
 
 from tempo.phases import PhasePlan
-from tempo.session import advanced, paused, reset, settled, started
+from tempo.session import SessionState, advanced, paused, reset, settled, started
 from tempo.status import snapshot
 from tempo.store import SessionStore, StoreError
 
@@ -69,10 +69,17 @@ class TempoApp:
         """The current snapshot, persisting any phases that elapsed since the last call."""
         now = self.clock()
         stored = self.store.load()
-        current = settled(stored, self.plan, now)
+        current = settled(self._rewound(stored, now), self.plan, now)
         if current != stored:
             self.store.save(current, self.plan)
         return snapshot(current, self.plan, now)
+
+    @staticmethod
+    def _rewound(state: SessionState, now: float) -> SessionState:
+        """A run stamped after `now` lost its clock (a reboot); restart it at `now`."""
+        if state.running and state.started_at is not None and state.started_at > now:
+            return replace(state, started_at=now, spent_seconds=0.0)
+        return state
 
     def apply(self, action: str, params: Optional[Dict[str, object]] = None) -> Dict[str, object]:
         """The snapshot after one named action; an unknown action raises ValueError."""
@@ -80,7 +87,7 @@ class TempoApp:
             raise ValueError(f"unknown action {action!r}; expected one of "
                              f"{', '.join(self.ACTIONS)}")
         now = self.clock()
-        current = settled(self.store.load(), self.plan, now)
+        current = settled(self._rewound(self.store.load(), now), self.plan, now)
         if action == "toggle":
             current = paused(current, now) if current.running else started(current, now)
         elif action == "skip":

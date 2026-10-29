@@ -9,8 +9,8 @@
 - **Total Python Modules**: `16`
 - **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `83`
-- **Total Source Lines**: `1624`
+- **Total Class Methods**: `85`
+- **Total Source Lines**: `1640`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `200` lines (`8688` bytes)
+**Size**: `207` lines (`9101` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -59,6 +59,7 @@
 - `class TempoApp` - *One session's backend: settle it against the clock, act on it, report it.*
   - Method `.__init__(store, plan, clock)`
   - Method `.status()` - *The current snapshot, persisting any phases that elapsed since the last call.*
+  - Method `._rewound(state, now)` - *A run stamped after `now` lost its clock (a reboot); restart it at `now`.*
   - Method `.apply(action, params)` - *The snapshot after one named action; an unknown action raises ValueError.*
 - `class TempoHandler` - *Translates requests into `TempoApp` calls; the app owns every timer rule.*
   - Method `.do_GET()`
@@ -137,7 +138,7 @@
 ### [`tests/test_app.py`](tests/test_app.py)
 > *Unit tests for the backend contract: status, actions and static path safety.*
 
-**Size**: `120` lines (`4796` bytes)
+**Size**: `129` lines (`5169` bytes)
 
 **Classes:**
 - `class FakeClock` - *A clock the test moves by hand, so no test ever sleeps (PRINCIPLE-014 R5).*
@@ -148,6 +149,7 @@
   - Method `.test_first_status_is_a_paused_focus_phase()`
   - Method `.test_toggle_starts_then_pauses_and_the_clock_only_runs_while_started()`
   - Method `.test_status_persists_phases_that_elapsed_between_polls()`
+  - Method `.test_a_clock_that_moved_backwards_restarts_the_run_at_now()`
   - Method `.test_skip_moves_on_and_reset_starts_over()`
   - Method `.test_configure_action_updates_plan_and_persists_it()`
   - Method `.test_configure_with_invalid_values_raises_value_error()`
