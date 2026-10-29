@@ -64,11 +64,23 @@ class TempoApp:
         saved_plan = self.store.load_plan()
         self.plan = saved_plan if saved_plan is not None else plan.validated()
         self.clock = clock
+        self._restored = False
+
+    def _load(self) -> SessionState:
+        """The stored session; a running one is paused once, when this process first reads it."""
+        stored = self.store.load()
+        if self._restored:
+            return stored
+        if stored.running:
+            stored = replace(stored, running=False, started_at=None, spent_seconds=0.0)
+            self.store.save(stored, self.plan)
+        self._restored = True
+        return stored
 
     def status(self) -> Dict[str, object]:
         """The current snapshot, persisting any phases that elapsed since the last call."""
         now = self.clock()
-        stored = self.store.load()
+        stored = self._load()
         current = settled(self._rewound(stored, now), self.plan, now)
         if current != stored:
             self.store.save(current, self.plan)
@@ -87,7 +99,7 @@ class TempoApp:
             raise ValueError(f"unknown action {action!r}; expected one of "
                              f"{', '.join(self.ACTIONS)}")
         now = self.clock()
-        current = settled(self._rewound(self.store.load(), now), self.plan, now)
+        current = settled(self._rewound(self._load(), now), self.plan, now)
         if action == "toggle":
             current = paused(current, now) if current.running else started(current, now)
         elif action == "skip":

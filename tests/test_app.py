@@ -62,6 +62,17 @@ class TempoAppTest(unittest.TestCase):
         self.clock.now += 1.0
         self.assertEqual(9, self.app.status()["remaining_seconds"])
 
+    def test_a_running_session_is_paused_when_a_new_app_starts(self):
+        self.app.apply("toggle")
+        self.clock.now += 13
+        self.app.status()
+        restarted = TempoApp(SessionStore(self.root / "session.json"), SHORT_PLAN, self.clock)
+        status = restarted.status()
+        self.assertFalse(status["running"])
+        self.assertEqual(1, status["completed_focus"])
+        self.assertEqual(SHORT_BREAK, status["phase"])
+        self.assertEqual(5, status["remaining_seconds"])
+
     def test_skip_moves_on_and_reset_starts_over(self):
         skipped = self.app.apply("skip")
         self.assertEqual(SHORT_BREAK, skipped["phase"])

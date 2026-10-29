@@ -110,7 +110,9 @@ a style-drift finding rather than a matter of taste.
 `state/session.json` is written to a temporary sibling, flushed, fsynced and moved into
 place, so a power loss leaves the old file or the new one, never half of each. The file
 carries a schema version: a version this build does not know is refused untouched, and an
-unreadable file is moved to `session.json.corrupt` and replaced by a fresh session.
+unreadable file is moved to `session.json.corrupt` and replaced by a fresh session. A
+running phase does not survive a server restart: it comes back paused at the start of the
+same phase, while completed focus phases, history and the cycle count are kept.
 
 <!-- aegean:brand-assets:start -->
 ## 🎨 Brand Assets

@@ -61,6 +61,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Each `history` entry is a `[completed_at, seconds]` pair; `snapshot()` sums the recorded seconds, and a legacy timestamp-only entry falls back to the current plan's focus length. The schema stays at version 1 because the decoder accepts both shapes.
 - **Consequences**: Analytics remain correct across interval changes, and old session files load without quarantine. The total covers the retained 200-entry history rather than every completion ever, which bounds the session file.
 
+### ADR-008: A running phase restarts paused after a server restart
+- **Date**: 2026-10-29
+- **Status**: Accepted
+- **Context**: `started_at` is a `time.monotonic()` value persisted in the session file, but a monotonic clock is only meaningful within one boot. After a reboot it could freeze a running phase or make it jump through phases that never ran.
+- **Decision**: `TempoApp` pauses a stored running session on the first read in a new process (`running=False`, `started_at=None`, `spent_seconds=0`), keeping the phase index, completed focus count, history and plan. The timer uses monotonic time only within one process.
+- **Consequences**: A restart or reboot can no longer corrupt the clock or count downtime as focus, at the cost of restarting the current phase; completed work survives. The session schema stays at version 1.
+
 ## Licensing migration (agpl-final)
 
 - New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.
