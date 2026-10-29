@@ -70,6 +70,7 @@ tempo/
 │   └── test_http.py          <- real socket: endpoints, assets, 400s and 404s
 ├── .gitignore                <- transient state and caches excluded
 ├── README.md
+├── assets/
 ├── COMMERCIAL.md
 ├── LICENSE
 ├── LICENSES/                 <- REUSE license texts

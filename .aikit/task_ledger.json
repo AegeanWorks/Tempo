@@ -1,134 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tempo-audit-hardening-v1",
+    "task_id": "tempo-reforge-fixes-v1",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1792833203.3055656,
-    "completed_at": 1792833207.9767883
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793293643.410065,
+    "owner": "opencode:reforge-fixes",
+    "started_by": "opencode:reforge-fixes",
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/5] Plan: zero-dependency focus timer with a themed static UI under the aikit ui guard",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792688514.1902144,
-      "timestamp_str": "2026-10-22 20:01:54",
-      "impact_assessment": {
-        "why": "exercise the UI contract, snapshot and style gates on a fresh project with a real, reviewable UI surface",
-        "benefits": "a usable local focus timer; a worked example of a non-React zero-dependency UI contract with an inventory proof and theme tokens",
-        "risks": "contract: ui.json surface and protected paths must match the real tree or verify refuses every edit; dependency: stdlib only, no npm or test runner beyond unittest; concurrency: session store written from a single-threaded http.server, one writer at a time; state: sessions.json must survive power loss mid-write",
-        "mitigation": "scaffold the contract from the real tree after the UI exists; atomic temp+fsync+replace writes with a schema version and refusal on unknown versions; unit tests under 10ms with no spawns and integration tests under 350ms"
-      }
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[4/5] Domain, store, UI surface, server and README built; 30 tests pass, 4/4 project gates pass, app dogfooded over HTTP; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792689179.3809588,
-      "timestamp_str": "2026-10-22 20:12:59"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Dogfood runner added (19/19 steps, golden path + chaos), UI proofs probed with 7 hostile edits (all caught), ADR-001..003 recorded; 5/5 gates pass; checklists: passed; UI begin/verify/finish blocked: user withheld commit authorization",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792690085.5259528,
-      "timestamp_str": "2026-10-22 20:28:05"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Full UI guard lifecycle exercised in a disposable jail: 8/8 verify probes and 11/11 lifecycle probes as expected; ported the verified focus-ring edit, ignored bytecode, fixed latent README tree drift; 5/5 gates pass; checklists: passed; still uncommitted by user instruction",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792690553.830878,
-      "timestamp_str": "2026-10-22 20:35:53"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Delivery authorized by the user: re-verified 30 tests and 5/5 gates, staging the initial tree, recording bootstrap UI surface evidence, then publishing public; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792691575.398482,
-      "timestamp_str": "2026-10-22 20:52:55"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 5",
-      "phase_num": 5,
-      "description": "[5/5] Delivered: initial commit 1990fc1, UI surface evidence finished (34 entries, inventory digest) and task completed; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792691760.6187282,
-      "timestamp_str": "2026-10-22 20:56:00"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tempo-focus-timer-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792691764.8517356,
-      "timestamp_str": "2026-10-22 20:56:04"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Fixed ConnectionResetError traceback on dropped connections (failing test first), added the dropped-connection chaos probe and the R6 traceback gate, ASCII-safe report; ADR-004; 31 tests, dogfood 21/21, 5/5 gates; checklists: passed; still uncommitted",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792757035.106268,
-      "timestamp_str": "2026-10-23 15:03:55"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "[5/5] Delivery authorized: dropped connections handled silently, traceback gate added, ADR-004; checklists: passed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792831182.3364592,
-      "timestamp_str": "2026-10-24 11:39:42"
-    },
-    {
-      "task_id": "tempo-focus-timer-v1",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'tempo-focus-timer-v1' completed successfully.",
-      "status": "completed",
-      "timestamp": 1792831417.1094296,
-      "timestamp_str": "2026-10-24 11:43:37"
-    },
-    {
-      "task_id": "tempo-enhancements-v1",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/4] Plan: Audio chimes, customizable intervals, and session analytics with zero external dependencies",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1792831757.1484685,
-      "timestamp_str": "2026-10-24 11:49:17",
-      "impact_assessment": {
-        "why": "Fulfill user request for phase transition audio chimes, configurable interval durations on the fly, and local session analytics/history while preserving Tempo's zero-dependency, crash-safe architecture.",
-        "benefits": "Rich user feedback via Web Audio API without asset bloat; full user autonomy over focus and break lengths without restarting Python; local session history and analytics; 100% test coverage and UI guard compliance.",
-        "risks": "contract: UI contract surface changes must be tracked through .aikit/ui.json without breaking inventory proofs; dependency: stdlib and native Web Audio API only, no external audio files or libraries; concurrency: single-threaded HTTP server writes must remain atomic; state: session.json additions must be backward-compatible with schema 1 or safely migrated without data loss.",
-        "mitigation": "Keep all audio generation purely synthetic in client JS; validate all interval inputs on backend before saving; maintain atomic fsync+replace session persistence with backward-compatible schema; follow strict TDD and UI guard begin/verify/finish cycle."
-      }
-    },
     {
       "task_id": "tempo-enhancements-v1",
       "phase": "phase 4",
@@ -186,6 +68,178 @@
       "status": "completed",
       "timestamp": 1792833207.9767895,
       "timestamp_str": "2026-10-24 12:13:27"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 1",
+      "phase_num": 3,
+      "description": "Reforge stage 1: window 3, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793292623.7882369,
+      "timestamp_str": "2026-10-29 19:50:23",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 2",
+      "phase_num": 3,
+      "description": "Reforge stage 2: window 6, 3 commit(s), 1 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793292667.3126962,
+      "timestamp_str": "2026-10-29 19:51:07",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 3",
+      "phase_num": 3,
+      "description": "Reforge stage 3: window 9, 3 commit(s), 2 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 4 binary not analysed",
+      "files_affected": [
+        "assets/logo.jpg",
+        "assets/logo.png",
+        "assets/social-preview.jpg",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793292693.039711,
+      "timestamp_str": "2026-10-29 19:51:33",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 4",
+      "phase_num": 3,
+      "description": "Reforge stage 4: window 12, 3 commit(s), 4 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 3 binary not analysed",
+      "files_affected": [
+        "assets/artwork.jpg",
+        "assets/logo.png",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793292717.807691,
+      "timestamp_str": "2026-10-29 19:51:57",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 5",
+      "phase_num": 3,
+      "description": "Reforge stage 5: window 15, 3 commit(s), 7 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired, 2 binary not analysed",
+      "files_affected": [
+        "assets/screenshots/2026-10-28-home.png",
+        "assets/social-preview.png"
+      ],
+      "status": "in_progress",
+      "timestamp": 1793292752.5139284,
+      "timestamp_str": "2026-10-29 19:52:32",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 6",
+      "phase_num": 3,
+      "description": "Reforge stage 6: window 18, 3 commit(s), 6 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793292790.8804271,
+      "timestamp_str": "2026-10-29 19:53:10",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 7",
+      "phase_num": 3,
+      "description": "Reforge stage 7: window 21, 3 commit(s), 10 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793292885.9537733,
+      "timestamp_str": "2026-10-29 19:54:45",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 8",
+      "phase_num": 3,
+      "description": "Reforge stage 8: window 24, 3 commit(s), 14 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793292965.3115146,
+      "timestamp_str": "2026-10-29 19:56:05",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 9",
+      "phase_num": 3,
+      "description": "Reforge stage 9: window 27, 3 commit(s), 7 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293042.9592452,
+      "timestamp_str": "2026-10-29 19:57:22",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: window 28, 1 commit(s), 26 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293092.4510124,
+      "timestamp_str": "2026-10-29 19:58:12",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "reforge:run-1",
+      "phase": "reforge stage 10",
+      "phase_num": 3,
+      "description": "Reforge stage 10: run stopped at stage 10; resume it with `reforge resume`",
+      "files_affected": [],
+      "status": "suspended",
+      "timestamp": 1793293345.572069,
+      "timestamp_str": "2026-10-29 20:02:25",
+      "agent": "opencode"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v1",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/3] Harden HTTP input, record per-focus durations for analytics, and add regression tests for the reforge repairs",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293472.366253,
+      "timestamp_str": "2026-10-29 20:04:32",
+      "agent": "opencode:reforge-fixes",
+      "impact_assessment": {
+        "why": "Reforge found four open defects in tempo: analytics totals are recomputed from the current interval, Content-Length is trusted, wrong-typed state escapes quarantine (patched), and the UI inventory skips hyphenated handlers (patched); the two applied patches lack regression tests.",
+        "benefits": "Correct historical analytics, bounded HTTP input handling, regression tests that lock in both reforge repairs, and a clean reforge audit of the resulting commit.",
+        "risks": "contract: session.json history gains per-entry durations and must stay backward compatible with schema 1; dependency: standard library only; concurrency: the single-threaded server and atomic store stay unchanged; state: legacy timestamp-only history must decode without data loss or quarantine.",
+        "mitigation": "Decode both legacy timestamps and new [timestamp, seconds] entries, keep schema 1, add failing-first tests for every change, and run the full tempo gates before committing."
+      }
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[2/3] Implementation: strict Content-Length validation with close-on-refusal, per-completion focus durations in history with legacy migration, ADR-007, and regression tests for the store/UI-inventory reforge repairs; 46 tests pass",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293601.386862,
+      "timestamp_str": "2026-10-29 20:06:41",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v1",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[3/3] Delivery: Phase 4 gates 5/5 (test, dogfood, hygiene, guidelines, secrets); checklists: passed; commit and push, then resume reforge",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793293643.410065,
+      "timestamp_str": "2026-10-29 20:07:23",
+      "agent": "opencode:reforge-fixes"
     }
   ]
 }

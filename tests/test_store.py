@@ -22,9 +22,37 @@ class SessionStoreTest(unittest.TestCase):
 
     def test_round_trip_preserves_every_field(self):
         state = SessionState(phase_index=3, running=True, started_at=12.5,
-                             spent_seconds=4.25, completed_focus=2, history=(100.0, 200.0))
+                             spent_seconds=4.25, completed_focus=2,
+                             history=((100.0, 10), (200.0, None)))
         self.store.save(state)
         self.assertEqual(state, self.store.load())
+
+    def test_legacy_timestamp_only_history_is_migrated(self):
+        self.store.path.parent.mkdir(parents=True)
+        self.store.path.write_text(json.dumps({"schema": SCHEMA, "session": {
+            "phase_index": 1, "running": False, "started_at": None,
+            "spent_seconds": 0, "completed_focus": 2,
+            "history": [100.0, 200.0]}}), encoding="utf-8")
+        loaded = self.store.load()
+        self.assertEqual(((100.0, None), (200.0, None)), loaded.history)
+        self.assertFalse(self.store.quarantine.exists())
+
+    def test_wrong_typed_session_fields_are_quarantined(self):
+        self.store.path.parent.mkdir(parents=True)
+        self.store.path.write_text(json.dumps({"schema": SCHEMA, "session": {
+            "phase_index": [], "running": True, "started_at": None,
+            "spent_seconds": 0, "completed_focus": 0}}), encoding="utf-8")
+        self.assertEqual(SessionState.initial(), self.store.load())
+        self.assertTrue(self.store.quarantine.exists())
+
+    def test_overflowing_number_is_quarantined(self):
+        self.store.path.parent.mkdir(parents=True)
+        self.store.path.write_text(
+            '{"schema": 1, "session": {"phase_index": 1e400, "running": false, '
+            '"started_at": null, "spent_seconds": 0, "completed_focus": 0}}',
+            encoding="utf-8")
+        self.assertEqual(SessionState.initial(), self.store.load())
+        self.assertTrue(self.store.quarantine.exists())
 
     def test_plan_persistence_and_reload(self):
         from tempo.phases import PhasePlan

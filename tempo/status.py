@@ -21,9 +21,17 @@ def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, obje
     remaining = remaining_seconds(state, plan, now)
     try:
         today = datetime.fromtimestamp(now).date()
-        today_count = sum(1 for ts in state.history if datetime.fromtimestamp(ts).date() == today)
+        today_count = 0
+        today_seconds = 0
+        for timestamp, seconds in state.history:
+            if datetime.fromtimestamp(timestamp).date() == today:
+                today_count += 1
+                today_seconds += plan.focus_seconds if seconds is None else seconds
     except (OSError, OverflowError, ValueError):
         today_count = state.completed_focus
+        today_seconds = state.completed_focus * plan.focus_seconds
+    total_seconds = sum(plan.focus_seconds if seconds is None else seconds
+                        for _, seconds in state.history)
     return {
         "phase": phase.kind,
         "phase_index": state.phase_index,
@@ -38,6 +46,6 @@ def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, obje
         "short_break_seconds": plan.short_break_seconds,
         "long_break_seconds": plan.long_break_seconds,
         "today_focus_count": today_count,
-        "today_focus_seconds": today_count * plan.focus_seconds,
-        "total_focus_seconds": state.completed_focus * plan.focus_seconds,
+        "today_focus_seconds": today_seconds,
+        "total_focus_seconds": total_seconds,
     }

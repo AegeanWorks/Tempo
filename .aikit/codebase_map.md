@@ -6,11 +6,11 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `15`
-- **Total Classes**: `19`
+- **Total Python Modules**: `16`
+- **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `71`
-- **Total Source Lines**: `1474`
+- **Total Class Methods**: `82`
+- **Total Source Lines**: `1614`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `187` lines (`8186` bytes)
+**Size**: `200` lines (`8688` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -79,7 +79,7 @@
 ### [`tempo/session.py`](tempo/session.py)
 > *Session state and its transitions.*
 
-**Size**: `103` lines (`3832` bytes)
+**Size**: `104` lines (`3889` bytes)
 
 **Classes:**
 - `class SessionState` - *Where a session stands: its phase, its run clock and its finished focus count.*
@@ -99,7 +99,7 @@
 ### [`tempo/status.py`](tempo/status.py)
 > *The read model the UI renders.*
 
-**Size**: `43` lines (`1733` bytes)
+**Size**: `51` lines (`2067` bytes)
 
 **Functions:**
 - `def snapshot(state, plan, now)` - *A settled session as the flat payload `GET /api/status` returns.*
@@ -109,7 +109,7 @@
 ### [`tempo/store.py`](tempo/store.py)
 > *Crash-safe persistence for one session.*
 
-**Size**: `137` lines (`5598` bytes)
+**Size**: `144` lines (`5945` bytes)
 
 **Classes:**
 - `class StoreError` - *A state file this build must not touch: the caller reports why and the fix.*
@@ -163,7 +163,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `121` lines (`5155` bytes)
+**Size**: `154` lines (`6712` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -176,13 +176,17 @@
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
   - Method `.test_unknown_paths_answer_404()`
+  - Method `.test_negative_content_length_is_refused_without_reading()`
+  - Method `.test_non_numeric_content_length_is_refused()`
+  - Method `.test_oversized_body_is_refused_and_the_connection_closes()`
+  - Method `.raw_post(content_length, body)`
 
 ---
 
 ### [`tests/test_session.py`](tests/test_session.py)
 > *Unit tests for the phase plan, session transitions and the status read model.*
 
-**Size**: `105` lines (`4673` bytes)
+**Size**: `124` lines (`5754` bytes)
 
 **Classes:**
 - `class PhasePlanTest`
@@ -200,6 +204,8 @@
 - `class SnapshotTest`
   - Method `.test_snapshot_reports_whole_seconds_and_cycle_position()`
   - Method `.test_snapshot_includes_plan_durations_and_analytics()`
+  - Method `.test_snapshot_keeps_recorded_duration_when_the_plan_changes()`
+  - Method `.test_legacy_history_without_a_duration_uses_the_current_plan()`
   - Method `.test_remaining_never_goes_negative()`
 
 ---
@@ -207,19 +213,34 @@
 ### [`tests/test_store.py`](tests/test_store.py)
 > *Unit tests for atomic session persistence, schema refusal and quarantine.*
 
-**Size**: `80` lines (`3547` bytes)
+**Size**: `108` lines (`5044` bytes)
 
 **Classes:**
 - `class SessionStoreTest`
   - Method `.setUp()`
   - Method `.test_missing_file_reads_as_a_fresh_session()`
   - Method `.test_round_trip_preserves_every_field()`
+  - Method `.test_legacy_timestamp_only_history_is_migrated()`
+  - Method `.test_wrong_typed_session_fields_are_quarantined()`
+  - Method `.test_overflowing_number_is_quarantined()`
   - Method `.test_plan_persistence_and_reload()`
   - Method `.test_save_leaves_no_temporary_files_behind()`
   - Method `.test_unknown_schema_is_refused_without_touching_the_file()`
   - Method `.test_corrupt_file_is_quarantined_and_replaced_by_a_fresh_session()`
   - Method `.test_a_blocked_quarantine_is_reported_instead_of_swallowed()`
   - Method `.test_missing_fields_count_as_corrupt()`
+
+---
+
+### [`tests/test_ui_inventory.py`](tests/test_ui_inventory.py)
+> *Unit tests for the UI inventory parser: the handler list is the guard's evidence.*
+
+**Size**: `31` lines (`929` bytes)
+
+**Classes:**
+- `class HandlerEntriesTest`
+  - Method `.setUp()`
+  - Method `.test_quoted_and_hyphenated_keys_are_included()`
 
 ---
 
@@ -260,7 +281,7 @@
 ### [`tools/ui_inventory.py`](tools/ui_inventory.py)
 > *Print Tempo's UI inventory, one entry per line.*
 
-**Size**: `102` lines (`3738` bytes)
+**Size**: `102` lines (`3757` bytes)
 
 **Classes:**
 - `class SurfaceParser` - *Collects the identified elements, named actions and live regions of one page.*

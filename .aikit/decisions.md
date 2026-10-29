@@ -54,6 +54,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Added `configure` action to `TempoApp` accepting `focus_seconds`, `short_break_seconds`, `long_break_seconds`, and `cycle_length`. The updated plan is validated through `PhasePlan.validated()`, returned in status snapshots, and persisted as `"plan"` in `session.json` by `SessionStore`.
 - **Consequences**: Users customize intervals live without restarting the server, and customizations persist across restarts. The schema remains backward-compatible with schema version 1.
 
+### ADR-007: Focus history records each completion's duration
+- **Date**: 2026-10-29
+- **Status**: Accepted
+- **Context**: Analytics derived today's and total focused time from the current interval length, so changing focus from 25 to 50 minutes retroactively doubled earlier completions. The session file already stored a timestamp per completed focus, but not the duration that completion actually ran.
+- **Decision**: Each `history` entry is a `[completed_at, seconds]` pair; `snapshot()` sums the recorded seconds, and a legacy timestamp-only entry falls back to the current plan's focus length. The schema stays at version 1 because the decoder accepts both shapes.
+- **Consequences**: Analytics remain correct across interval changes, and old session files load without quarantine. The total covers the retained 200-entry history rather than every completion ever, which bounds the session file.
+
 ## Licensing migration (agpl-final)
 
 - New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.

@@ -18,7 +18,7 @@ from typing import List, Set
 
 WEB_DIR = Path(__file__).resolve().parent.parent / "web"
 HANDLER_PATTERN = re.compile(r"^\s*var ACTIONS = \{(?P<body>[^}]*)\}", re.MULTILINE)
-KEY_PATTERN = re.compile(r"(\w+)\s*:")
+KEY_PATTERN = re.compile(r"[\x22']?([\w-]+)[\x22']?\s*:")
 TOKEN_PATTERN = re.compile(r"^\s*(--[a-z0-9-]+)\s*:", re.MULTILINE)
 ARIA_PATTERN = re.compile(r"aria-label(?:ledby)?")
 

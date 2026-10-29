@@ -29,7 +29,7 @@ class SessionState:
     started_at: Optional[float] = None
     spent_seconds: float = 0.0
     completed_focus: int = 0
-    history: Tuple[float, ...] = ()
+    history: Tuple[Tuple[float, Optional[int]], ...] = ()
 
     @staticmethod
     def initial() -> "SessionState":
@@ -68,8 +68,9 @@ def paused(state: SessionState, now: float) -> SessionState:
 
 def advanced(state: SessionState, plan: PhasePlan, now: float) -> SessionState:
     """The next phase, from a standing start, counting a finished focus phase."""
-    finished_focus = plan.phase_at(state.phase_index).kind == FOCUS
-    new_history = (state.history + ((now,) if finished_focus else ()))[-200:]
+    phase = plan.phase_at(state.phase_index)
+    finished_focus = phase.kind == FOCUS
+    new_history = (state.history + (((now, phase.seconds),) if finished_focus else ()))[-200:]
     return SessionState(
         phase_index=state.phase_index + 1,
         running=state.running,

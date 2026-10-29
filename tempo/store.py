@@ -14,7 +14,7 @@ import os
 import tempfile
 from dataclasses import asdict
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional, Tuple
 
 from tempo.session import SessionState
 
@@ -45,14 +45,21 @@ def _decode(payload: object) -> SessionState:
     if not isinstance(session, dict) or any(field not in session for field in FIELDS):
         raise ValueError("state file is missing session fields")
     history_raw = session.get("history", ())
-    history = tuple(float(x) for x in history_raw) if isinstance(history_raw, (list, tuple)) else ()
+    history: List[Tuple[float, Optional[int]]] = []
+    if isinstance(history_raw, (list, tuple)):
+        for entry in history_raw:
+            if isinstance(entry, (list, tuple)) and len(entry) == 2:
+                seconds = None if entry[1] is None else int(entry[1])
+                history.append((float(entry[0]), seconds))
+            else:
+                history.append((float(entry), None))
     return SessionState(
         phase_index=int(session["phase_index"]),
         running=bool(session["running"]),
         started_at=None if session["started_at"] is None else float(session["started_at"]),
         spent_seconds=float(session["spent_seconds"]),
         completed_focus=int(session["completed_focus"]),
-        history=history,
+        history=tuple(history),
     )
 
 
@@ -72,7 +79,7 @@ class SessionStore:
                 return _decode(json.load(handle))
         except StoreError:
             raise
-        except (OSError, ValueError):
+        except (OSError, ValueError, TypeError, OverflowError):
             self._quarantine()
             return SessionState.initial()
 

@@ -128,8 +128,19 @@ class TempoHandler(BaseHTTPRequestHandler):
         if urlparse(self.path).path != "/api/action":
             self._json(404, {"error": "not found", "path": self.path})
             return
-        length = int(self.headers.get("Content-Length") or 0)
+        raw_length = self.headers.get("Content-Length") or "0"
+        try:
+            length = int(raw_length)
+        except ValueError:
+            self.close_connection = True
+            self._json(400, {"error": "Content-Length must be an integer"})
+            return
+        if length < 0:
+            self.close_connection = True
+            self._json(400, {"error": "Content-Length must not be negative"})
+            return
         if length > MAX_BODY_BYTES:
+            self.close_connection = True
             self._json(413, {"error": f"body over {MAX_BODY_BYTES} bytes"})
             return
         raw = self.rfile.read(length) if length else b"{}"
@@ -161,6 +172,8 @@ class TempoHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "max-age=60" if cache else "no-store")
+        if self.close_connection:
+            self.send_header("Connection", "close")
         self.end_headers()
         self.wfile.write(body)
         self.wfile.flush()

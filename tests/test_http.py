@@ -116,6 +116,39 @@ class HttpTest(unittest.TestCase):
             self.addCleanup(caught.exception.close)
             self.assertEqual(404, caught.exception.code)
 
+    def test_negative_content_length_is_refused_without_reading(self):
+        response = self.raw_post(b"-1", b"")
+        self.assertIn(b" 400 ", response.split(b"\r\n", 1)[0])
+
+    def test_non_numeric_content_length_is_refused(self):
+        response = self.raw_post(b"nope", b"")
+        self.assertIn(b" 400 ", response.split(b"\r\n", 1)[0])
+
+    def test_oversized_body_is_refused_and_the_connection_closes(self):
+        connection = socket.create_connection(
+            ("127.0.0.1", self.server.server_address[1]), timeout=TIMEOUT)
+        try:
+            connection.sendall(b"POST /api/action HTTP/1.1\r\nHost: tempo\r\n"
+                               b"Content-Type: application/json\r\n"
+                               b"Content-Length: 5000\r\n\r\n" + b"x" * 5000)
+            response = connection.recv(65536)
+            self.assertIn(b" 413 ", response.split(b"\r\n", 1)[0])
+            self.assertIn(b"Connection: close", response)
+            connection.settimeout(1)
+            self.assertEqual(b"", connection.recv(1))
+        finally:
+            connection.close()
+
+    def raw_post(self, content_length: bytes, body: bytes) -> bytes:
+        connection = socket.create_connection(
+            ("127.0.0.1", self.server.server_address[1]), timeout=TIMEOUT)
+        try:
+            connection.sendall(b"POST /api/action HTTP/1.1\r\nHost: tempo\r\n"
+                               b"Content-Length: " + content_length + b"\r\n\r\n" + body)
+            return connection.recv(65536)
+        finally:
+            connection.close()
+
 
 if __name__ == "__main__":
     unittest.main()
