@@ -116,6 +116,20 @@ class HttpTest(unittest.TestCase):
             self.addCleanup(caught.exception.close)
             self.assertEqual(404, caught.exception.code)
 
+    def test_a_post_to_an_unknown_path_closes_the_connection(self):
+        connection = socket.create_connection(
+            ("127.0.0.1", self.server.server_address[1]), timeout=TIMEOUT)
+        try:
+            connection.sendall(b"POST /nope HTTP/1.1\r\nHost: tempo\r\n"
+                               b"Content-Length: 2\r\n\r\n{}")
+            response = connection.recv(65536)
+            self.assertIn(b" 404 ", response.split(b"\r\n", 1)[0])
+            self.assertIn(b"Connection: close", response)
+            connection.settimeout(1)
+            self.assertEqual(b"", connection.recv(1))
+        finally:
+            connection.close()
+
     def test_negative_content_length_is_refused_without_reading(self):
         response = self.raw_post(b"-1", b"")
         self.assertIn(b" 400 ", response.split(b"\r\n", 1)[0])

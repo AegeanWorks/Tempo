@@ -9,8 +9,8 @@
 - **Total Python Modules**: `16`
 - **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `87`
-- **Total Source Lines**: `1663`
+- **Total Class Methods**: `88`
+- **Total Source Lines**: `1678`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `219` lines (`9560` bytes)
+**Size**: `220` lines (`9601` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -167,7 +167,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `154` lines (`6712` bytes)
+**Size**: `168` lines (`7362` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -180,6 +180,7 @@
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
   - Method `.test_unknown_paths_answer_404()`
+  - Method `.test_a_post_to_an_unknown_path_closes_the_connection()`
   - Method `.test_negative_content_length_is_refused_without_reading()`
   - Method `.test_non_numeric_content_length_is_refused()`
   - Method `.test_oversized_body_is_refused_and_the_connection_closes()`

@@ -145,6 +145,7 @@ class TempoHandler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler contract
         if urlparse(self.path).path != "/api/action":
+            self.close_connection = True
             self._json(404, {"error": "not found", "path": self.path})
             return
         raw_length = self.headers.get("Content-Length") or "0"

@@ -1,39 +1,16 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "tempo-reforge-fixes-v4",
+    "task_id": "tempo-reforge-fixes-v5",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1793295344.3935301,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1793295582.4373455,
     "owner": "opencode:reforge-fixes",
     "started_by": "opencode:reforge-fixes",
-    "continuations": [],
-    "completed_at": 1793295391.666964
+    "continuations": []
   },
   "checkpoints": [
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 10",
-      "phase_num": 3,
-      "description": "Reforge stage 10: run resumed",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793293669.0504255,
-      "timestamp_str": "2026-10-29 20:07:49",
-      "agent": "opencode"
-    },
-    {
-      "task_id": "reforge:run-1",
-      "phase": "reforge stage 11",
-      "phase_num": 3,
-      "description": "Reforge stage 11: window 29, 1 commit(s), 13 file(s) reviewed (unreviewed), 0 finding(s), 0 repaired",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1793293679.62342,
-      "timestamp_str": "2026-10-29 20:07:59",
-      "agent": "opencode"
-    },
     {
       "task_id": "tempo-reforge-fixes-v1",
       "phase": "completed",
@@ -244,6 +221,34 @@
       "status": "completed",
       "timestamp": 1793295391.6669657,
       "timestamp_str": "2026-10-29 20:36:31",
+      "agent": "opencode:reforge-fixes"
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v5",
+      "phase": "planning",
+      "phase_num": 2,
+      "description": "[1/1] Close the connection after a POST to an unknown path so an unread body cannot desynchronise the next request",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793295555.902333,
+      "timestamp_str": "2026-10-29 20:39:15",
+      "agent": "opencode:reforge-fixes",
+      "impact_assessment": {
+        "why": "A POST to /nope answers 404 without reading its body; on a keep-alive connection the leftover bytes are parsed as the next request, and the intermittent ConnectionAbortedError in the test suite came from that desync.",
+        "benefits": "The 404 path is deterministic, the test suite no longer flakes, and the HTTP handler closes every connection whose body it did not consume.",
+        "risks": "contract: POST 404 now carries Connection: close; dependency: none; concurrency: the single-threaded server is unchanged; state: no state change.",
+        "mitigation": "Add a failing-first raw-socket test that asserts 404, Connection: close and EOF, then run the suite 30 times before committing."
+      }
+    },
+    {
+      "task_id": "tempo-reforge-fixes-v5",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "[1/1] Delivery: POST-to-unknown-path close with a failing-first socket test; 50 tests pass and 30 repeated runs pass; Phase 4 gates 5/5 (test, dogfood, hygiene, guidelines, secrets); checklists: passed",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1793295582.4373455,
+      "timestamp_str": "2026-10-29 20:39:42",
       "agent": "opencode:reforge-fixes"
     }
   ]
