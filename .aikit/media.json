@@ -42,6 +42,45 @@
       }
     }
   },
-  "screenshots": [],
+  "screenshots": [
+    {
+      "path": "assets/screenshots/2026-11-03-idle.png",
+      "alt": "Tempo idle focus timer at 2026-11-03",
+      "caption": "Fresh focus phase from python run.py (http://127.0.0.1:8765): 25:00 idle, cycle dots, Start/Skip/Reset/Sound/Settings, zero intervals today.",
+      "commit": "d93bb373f884672ef429986a0c4a0f417a6699ac",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real full-page capture of the served idle timer: phase label, 25:00 readout, cycle position, all five controls, empty-history copy. Fresh-user state.",
+        "score": 92,
+        "reviewed_at": "2026-11-03"
+      }
+    },
+    {
+      "path": "assets/screenshots/2026-11-03-running.png",
+      "alt": "Tempo running focus timer at 2026-11-03",
+      "caption": "Same build seconds after Start: 24:55 counting down, Start becomes Pause. Reset restored idle after capture.",
+      "commit": "d93bb373f884672ef429986a0c4a0f417a6699ac",
+      "taken_at": "2026-11-03",
+      "viewport": "1440x900",
+      "width": 1440,
+      "height": 900,
+      "status": "approved",
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:kilo",
+        "method": "vision",
+        "notes": "Real running capture one click from idle: countdown live, Pause armed, history still zero. Honest core interaction; an earlier attempt captured a sibling agent's Memory Reconstruction tab and was deleted and retaken on the tempo tab.",
+        "score": 91,
+        "reviewed_at": "2026-11-03"
+      }
+    }
+  ],
   "model": "community/scriptsnsenses-sys/flux-2-dev-free"
 }

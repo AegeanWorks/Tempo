@@ -68,6 +68,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: `TempoApp` pauses a stored running session on the first read in a new process (`running=False`, `started_at=None`, `spent_seconds=0`), keeping the phase index, completed focus count, history and plan. The timer uses monotonic time only within one process.
 - **Consequences**: A restart or reboot can no longer corrupt the clock or count downtime as focus, at the cost of restarting the current phase; completed work survives. The session schema stays at version 1.
 
+### ADR-009: First screenshot keepers are idle 25:00 and running 24:55
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: Tempo had approved timer brand (6/6) but `assets/screenshots/` was empty and `media.json screenshots: []`.
+- **Decision**: Capture `python run.py` on `http://127.0.0.1:8765` at viewport 1440x900: `2026-11-03-idle.png` (fresh 25:00 focus) and `2026-11-03-running.png` (seconds after Start, 24:55, Pause armed), commit `d93bb37`. Reset restored idle after capture; no session residue in the repo. Register both in `.aikit/media.json` and the README `aegean:screenshots` block.
+- **Consequences**: README proves the core Start interaction. Lesson: verify the captured tab before judging — a first running attempt framed a sibling agent's Memory Reconstruction tab and was deleted and retaken on the tempo tab. Reproduce with: `python run.py`, open the URL, full-page screenshot, click Start, screenshot, click Reset.
+
 ## Licensing migration (agpl-final)
 
 - New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.

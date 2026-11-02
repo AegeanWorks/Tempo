@@ -123,3 +123,13 @@ same phase, while completed focus phases, history and the cycle count are kept.
 ## 📜 License
 
 Free for personal use under the Aegean License 1.1 (AL-1.1); see [LICENSE](LICENSE). Any commercial use needs the Aegean Commercial License 1.0 (ACL-1.0); see [COMMERCIAL.md](COMMERCIAL.md).
+
+<!-- aegean:screenshots:start -->
+## Screenshots
+
+<a href="https://github.com/AegeanWorks/Tempo/commit/d93bb37"><img src="assets/screenshots/2026-11-03-idle.png" alt="Tempo idle focus timer at 2026-11-03"></a>
+
+<a href="https://github.com/AegeanWorks/Tempo/commit/d93bb37"><img src="assets/screenshots/2026-11-03-running.png" alt="Tempo running focus timer at 2026-11-03"></a>
+
+*commit `d93bb37` · 2026-11-03 · viewport 1440x900 · idle 25:00 plus running 24:55 after Start*
+<!-- aegean:screenshots:end -->
