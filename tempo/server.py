@@ -108,10 +108,22 @@ class TempoApp:
             current = reset(current)
         elif action == "configure":
             cfg = params or {}
-            focus = int(cfg["focus_seconds"]) if "focus_seconds" in cfg and cfg["focus_seconds"] is not None else self.plan.focus_seconds
-            short_b = int(cfg["short_break_seconds"]) if "short_break_seconds" in cfg and cfg["short_break_seconds"] is not None else self.plan.short_break_seconds
-            long_b = int(cfg["long_break_seconds"]) if "long_break_seconds" in cfg and cfg["long_break_seconds"] is not None else self.plan.long_break_seconds
-            cycle_l = int(cfg["cycle_length"]) if "cycle_length" in cfg and cfg["cycle_length"] is not None else self.plan.cycle_length
+
+            def _as_int(value: object, field: str) -> int:
+                if isinstance(value, bool):
+                    raise ValueError(f"{field} must be an int, not a bool")
+                try:
+                    return int(value)  # type: ignore[arg-type]
+                except (ValueError, TypeError) as error:
+                    raise ValueError(f"{field} must be an integer: {error}") from error
+
+            try:
+                focus = _as_int(cfg["focus_seconds"], "focus_seconds") if "focus_seconds" in cfg and cfg["focus_seconds"] is not None else self.plan.focus_seconds
+                short_b = _as_int(cfg["short_break_seconds"], "short_break_seconds") if "short_break_seconds" in cfg and cfg["short_break_seconds"] is not None else self.plan.short_break_seconds
+                long_b = _as_int(cfg["long_break_seconds"], "long_break_seconds") if "long_break_seconds" in cfg and cfg["long_break_seconds"] is not None else self.plan.long_break_seconds
+                cycle_l = _as_int(cfg["cycle_length"], "cycle_length") if "cycle_length" in cfg and cfg["cycle_length"] is not None else self.plan.cycle_length
+            except (ValueError, TypeError) as error:
+                raise ValueError(f"configure values must be integers: {error}") from error
             from tempo.phases import PhasePlan
             self.plan = PhasePlan(focus, short_b, long_b, cycle_l).validated()
         self.store.save(current, self.plan)

@@ -104,6 +104,10 @@ class TempoAppTest(unittest.TestCase):
             self.app.apply("configure", {"focus_seconds": 0})
         with self.assertRaises(ValueError):
             self.app.apply("configure", {"cycle_length": 0})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": []})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": True})
 
     def test_unknown_action_is_refused_and_leaves_the_session_alone(self):
         self.app.apply("toggle")

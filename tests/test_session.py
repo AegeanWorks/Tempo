@@ -26,6 +26,10 @@ class PhasePlanTest(unittest.TestCase):
             PhasePlan(focus_seconds=0).validated()
         with self.assertRaisesRegex(ValueError, "cycle_length"):
             PhasePlan(cycle_length=0).validated()
+        with self.assertRaisesRegex(ValueError, "focus_seconds"):
+            PhasePlan(focus_seconds=True).validated()
+        with self.assertRaisesRegex(ValueError, "cycle_length"):
+            PhasePlan(cycle_length=True).validated()
         self.assertEqual(PhasePlan(), PhasePlan().validated())
 
 

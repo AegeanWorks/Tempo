@@ -9,8 +9,8 @@
 - **Total Python Modules**: `16`
 - **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `88`
-- **Total Source Lines**: `1678`
+- **Total Class Methods**: `89`
+- **Total Source Lines**: `1705`
 
 ---
 
@@ -38,7 +38,7 @@
 ### [`tempo/phases.py`](tempo/phases.py)
 > *The phase plan: which phase follows which, and how long each one runs.*
 
-**Size**: `57` lines (`1972` bytes)
+**Size**: `57` lines (`2040` bytes)
 
 **Classes:**
 - `class Phase` - *One phase of a session: its kind and its full duration in seconds.*
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `220` lines (`9601` bytes)
+**Size**: `232` lines (`10283` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -139,7 +139,7 @@
 ### [`tests/test_app.py`](tests/test_app.py)
 > *Unit tests for the backend contract: status, actions and static path safety.*
 
-**Size**: `140` lines (`5670` bytes)
+**Size**: `144` lines (`5886` bytes)
 
 **Classes:**
 - `class FakeClock` - *A clock the test moves by hand, so no test ever sleeps (PRINCIPLE-014 R5).*
@@ -167,7 +167,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `168` lines (`7362` bytes)
+**Size**: `175` lines (`7689` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -181,6 +181,7 @@
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
   - Method `.test_unknown_paths_answer_404()`
   - Method `.test_a_post_to_an_unknown_path_closes_the_connection()`
+  - Method `.test_a_configure_with_the_wrong_types_answers_400()`
   - Method `.test_negative_content_length_is_refused_without_reading()`
   - Method `.test_non_numeric_content_length_is_refused()`
   - Method `.test_oversized_body_is_refused_and_the_connection_closes()`
@@ -191,7 +192,7 @@
 ### [`tests/test_session.py`](tests/test_session.py)
 > *Unit tests for the phase plan, session transitions and the status read model.*
 
-**Size**: `131` lines (`6143` bytes)
+**Size**: `135` lines (`6381` bytes)
 
 **Classes:**
 - `class PhasePlanTest`

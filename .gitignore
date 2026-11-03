@@ -3,6 +3,7 @@
 .aikit/*.bak
 .aikit/*.tmp_*
 .aikit/*.corrupt_*
+.aikit/*.log
 .aikit/reforge.reviews/
 
 # Tempo runtime and dogfood artefacts (PRINCIPLE-015 R4)
@@ -12,5 +13,4 @@ state/
 # Python bytecode
 __pycache__/
 *.py[cod]
-# AIKit transient state
 node_modules/

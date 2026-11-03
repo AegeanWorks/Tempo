@@ -39,9 +39,9 @@ class PhasePlan:
         """The same plan, or a ValueError naming the field that is out of range."""
         for field in ("focus_seconds", "short_break_seconds", "long_break_seconds"):
             seconds = getattr(self, field)
-            if not isinstance(seconds, int) or not MIN_SECONDS <= seconds <= MAX_SECONDS:
+            if isinstance(seconds, bool) or not isinstance(seconds, int) or not MIN_SECONDS <= seconds <= MAX_SECONDS:
                 raise ValueError(f"{field} must be an int between {MIN_SECONDS} and {MAX_SECONDS}")
-        if not isinstance(self.cycle_length, int) or self.cycle_length < 1:
+        if isinstance(self.cycle_length, bool) or not isinstance(self.cycle_length, int) or self.cycle_length < 1:
             raise ValueError("cycle_length must be an int of at least 1")
         return self
 

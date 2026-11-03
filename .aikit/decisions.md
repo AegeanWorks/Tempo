@@ -75,6 +75,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: Capture `python run.py` on `http://127.0.0.1:8765` at viewport 1440x900: `2026-11-03-idle.png` (fresh 25:00 focus) and `2026-11-03-running.png` (seconds after Start, 24:55, Pause armed), commit `d93bb37`. Reset restored idle after capture; no session residue in the repo. Register both in `.aikit/media.json` and the README `aegean:screenshots` block.
 - **Consequences**: README proves the core Start interaction. Lesson: verify the captured tab before judging — a first running attempt framed a sibling agent's Memory Reconstruction tab and was deleted and retaken on the tempo tab. Reproduce with: `python run.py`, open the URL, full-page screenshot, click Start, screenshot, click Reset.
 
+### ADR-010: `configure` refuses non-integers with 400 and `bool` is never a duration
+- **Date**: 2026-11-03
+- **Status**: Accepted
+- **Context**: Wave audit of the first 30 commits reproduced two live defects: `TempoApp.apply("configure", {"focus_seconds": []})` raised `TypeError`, which `_guarded` does not catch, so the socket died with a traceback (ADR-004 violation); and `PhasePlan(focus_seconds=True).validated()` passed because `bool` subclasses `int`.
+- **Decision**: `apply("configure")` converts each supplied value through a helper that rejects `bool` and maps `TypeError` to `ValueError`, so the HTTP layer answers 400; `PhasePlan.validated()` rejects `bool` for all four fields. Schema stays at version 1.
+- **Consequences**: Malformed configure payloads are deterministic 400s with no traceback; `True`/`False` are refused even though `int(True) == 1`. Reproduce with: `python -m unittest tests.test_app tests.test_session tests.test_http`.
+
 ## Licensing migration (agpl-final)
 
 - New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.

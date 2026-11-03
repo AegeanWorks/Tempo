@@ -130,6 +130,13 @@ class HttpTest(unittest.TestCase):
         finally:
             connection.close()
 
+    def test_a_configure_with_the_wrong_types_answers_400(self):
+        with self.assertRaises(urllib.error.HTTPError) as caught:
+            self.post("/api/action", {"action": "configure", "focus_seconds": []})
+        error = caught.exception
+        self.addCleanup(error.close)
+        self.assertEqual(400, error.code)
+
     def test_negative_content_length_is_refused_without_reading(self):
         response = self.raw_post(b"-1", b"")
         self.assertIn(b" 400 ", response.split(b"\r\n", 1)[0])
