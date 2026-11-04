@@ -6,11 +6,11 @@
 ---
 
 ## 📊 Codebase Metrics
-- **Total Python Modules**: `16`
-- **Total Classes**: `20`
+- **Total Python Modules**: `17`
+- **Total Classes**: `22`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `94`
-- **Total Source Lines**: `1809`
+- **Total Class Methods**: `98`
+- **Total Source Lines**: `1852`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `240` lines (`10855` bytes)
+**Size**: `240` lines (`10858` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -82,7 +82,7 @@
 ### [`tempo/session.py`](tempo/session.py)
 > *Session state and its transitions.*
 
-**Size**: `109` lines (`4254` bytes)
+**Size**: `109` lines (`4260` bytes)
 
 **Classes:**
 - `class SessionState` - *Where a session stands: its phase, its run clock and its finished focus count.*
@@ -102,7 +102,7 @@
 ### [`tempo/status.py`](tempo/status.py)
 > *The read model the UI renders.*
 
-**Size**: `56` lines (`2272` bytes)
+**Size**: `56` lines (`2285` bytes)
 
 **Functions:**
 - `def snapshot(state, plan, now, wall_now)` - *A settled session as the flat payload `GET /api/status` returns.*
@@ -188,6 +188,21 @@
   - Method `.test_non_numeric_content_length_is_refused()`
   - Method `.test_oversized_body_is_refused_and_the_connection_closes()`
   - Method `.raw_post(content_length, body)`
+
+---
+
+### [`tests/test_run.py`](tests/test_run.py)
+> *Unit tests for the entry point: flags, plan validation and exit codes.*
+
+**Size**: `43` lines (`1463` bytes)
+
+**Classes:**
+- `class ParseArgsTest`
+  - Method `.test_defaults_match_the_documented_timer()`
+  - Method `.test_fractional_minutes_are_accepted_as_flags()`
+- `class BuildPlanTest`
+  - Method `.test_flags_become_a_validated_plan_in_seconds()`
+  - Method `.test_bad_flag_values_raise_before_a_socket_opens()`
 
 ---
 

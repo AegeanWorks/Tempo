@@ -60,7 +60,7 @@ class TempoApp:
 
     def __init__(self, store: SessionStore, plan: PhasePlan,
                  clock: Callable[[], float],
-                 wall_clock: Callable[[], float] | None = None):
+                 wall_clock: Optional[Callable[[], float]] = None):
         self.store = store
         saved_plan = self.store.load_plan()
         self.plan = saved_plan if saved_plan is not None else plan.validated()

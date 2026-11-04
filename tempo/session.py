@@ -67,7 +67,7 @@ def paused(state: SessionState, now: float) -> SessionState:
 
 
 def advanced(state: SessionState, plan: PhasePlan, now: float,
-                 completed_at: float | None = None) -> SessionState:
+                 completed_at: Optional[float] = None) -> SessionState:
     """The next phase, from a standing start, counting a finished focus phase."""
     phase = plan.phase_at(state.phase_index)
     finished_focus = phase.kind == FOCUS
@@ -84,7 +84,7 @@ def advanced(state: SessionState, plan: PhasePlan, now: float,
 
 
 def settled(state: SessionState, plan: PhasePlan, now: float,
-              completed_at: float | None = None) -> SessionState:
+              completed_at: Optional[float] = None) -> SessionState:
     """
     The state with every phase that ran out before `now` advanced past.
 

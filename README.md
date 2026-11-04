@@ -113,6 +113,8 @@ carries a schema version: a version this build does not know is refused untouche
 unreadable file is moved to `session.json.corrupt` and replaced by a fresh session. A
 running phase does not survive a server restart: it comes back paused at the start of the
 same phase, while completed focus phases, history and the cycle count are kept.
+History keeps the most recent 200 completions with each completion's duration, so
+today's and total analytics are computed from retained history rather than lifetime ever.
 
 <!-- aegean:brand-assets:start -->
 ## 🎨 Brand Assets

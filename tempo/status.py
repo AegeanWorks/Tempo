@@ -9,14 +9,14 @@ PRINCIPLE-009, PRINCIPLE-012.
 """
 
 from datetime import datetime
-from typing import Dict
+from typing import Dict, Optional
 
 from tempo.phases import PhasePlan
 from tempo.session import SessionState, elapsed_seconds, remaining_seconds
 
 
 def snapshot(state: SessionState, plan: PhasePlan, now: float,
-             wall_now: float | None = None) -> Dict[str, object]:
+             wall_now: Optional[float] = None) -> Dict[str, object]:
     """A settled session as the flat payload `GET /api/status` returns."""
     phase = plan.phase_at(state.phase_index)
     remaining = remaining_seconds(state, plan, now)
