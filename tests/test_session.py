@@ -77,6 +77,14 @@ class SessionTransitionTest(unittest.TestCase):
         state = advanced(state, SHORT_PLAN, 105.0)
         self.assertEqual(1, len(state.history))
 
+    def test_advanced_stamps_history_with_wall_time_when_given(self):
+        state = advanced(SessionState.initial(), SHORT_PLAN, 100.0,
+                         completed_at=1700000000.0)
+        self.assertEqual((1700000000.0, 10), state.history[0])
+        landed = settled(started(SessionState.initial(), 100.0), SHORT_PLAN, 113.0,
+                         completed_at=1700000013.0)
+        self.assertEqual((1700000013.0, 10), landed.history[0])
+
 
 class SnapshotTest(unittest.TestCase):
 

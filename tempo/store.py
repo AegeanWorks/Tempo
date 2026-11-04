@@ -46,19 +46,41 @@ def _decode(payload: object) -> SessionState:
         raise ValueError("state file is missing session fields")
     history_raw = session.get("history", ())
     history: List[Tuple[float, Optional[int]]] = []
+    def _as_timestamp(value: object) -> float:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError("history timestamp must be a number")
+        return float(value)
+
     if isinstance(history_raw, (list, tuple)):
         for entry in history_raw:
             if isinstance(entry, (list, tuple)) and len(entry) == 2:
-                seconds = None if entry[1] is None else int(entry[1])
-                history.append((float(entry[0]), seconds))
+                seconds_raw = entry[1]
+                if seconds_raw is None:
+                    seconds = None
+                elif isinstance(seconds_raw, bool) or not isinstance(seconds_raw, int):
+                    raise ValueError("history duration must be an int or null")
+                else:
+                    seconds = seconds_raw
+                history.append((_as_timestamp(entry[0]), seconds))
             else:
-                history.append((float(entry), None))
+                history.append((_as_timestamp(entry), None))
+    def _as_int_field(value: object, field: str) -> int:
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError(f"state field {field} must be an int")
+        return value
+
+    def _as_float_field(value: object, field: str) -> float:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError(f"state field {field} must be a number")
+        return float(value)
+
     return SessionState(
-        phase_index=int(session["phase_index"]),
+        phase_index=_as_int_field(session["phase_index"], "phase_index"),
         running=bool(session["running"]),
-        started_at=None if session["started_at"] is None else float(session["started_at"]),
-        spent_seconds=float(session["spent_seconds"]),
-        completed_focus=int(session["completed_focus"]),
+        started_at=None if session["started_at"] is None else _as_float_field(
+            session["started_at"], "started_at"),
+        spent_seconds=_as_float_field(session["spent_seconds"], "spent_seconds"),
+        completed_focus=_as_int_field(session["completed_focus"], "completed_focus"),
         history=tuple(history),
     )
 
@@ -94,7 +116,14 @@ class SessionStore:
                 from tempo.phases import PhasePlan
                 plan_dict = payload["plan"]
                 fields = ("focus_seconds", "short_break_seconds", "long_break_seconds", "cycle_length")
-                kwargs = {k: int(plan_dict[k]) for k in fields if k in plan_dict}
+                kwargs = {}
+                for key in fields:
+                    if key not in plan_dict:
+                        continue
+                    value = plan_dict[key]
+                    if isinstance(value, bool) or not isinstance(value, int):
+                        return None
+                    kwargs[key] = value
                 return PhasePlan(**kwargs).validated()
         except Exception:
             return None

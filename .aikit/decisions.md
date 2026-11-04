@@ -82,6 +82,13 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Decision**: `apply("configure")` converts each supplied value through a helper that rejects `bool` and maps `TypeError` to `ValueError`, so the HTTP layer answers 400; `PhasePlan.validated()` rejects `bool` for all four fields. Schema stays at version 1.
 - **Consequences**: Malformed configure payloads are deterministic 400s with no traceback; `True`/`False` are refused even though `int(True) == 1`. Reproduce with: `python -m unittest tests.test_app tests.test_session tests.test_http`.
 
+### ADR-011: History uses wall time while the run clock stays monotonic, and every int field is strictly an int
+- **Date**: 2026-11-04
+- **Status**: Accepted
+- **Context**: Wave-1 audit reproduced two live defects: `history` timestamps used the monotonic clock, so after a reboot `today_focus_count` fell to 0 while `completed_focus` stayed 1 (verified with dual clocks: mono 100000 -> 500, wall 1700000000 constant); and `configure` silently truncated `12.9` to `12` and accepted `"30"`, contradicting ADR-010, while `load_plan` and `_decode` accepted `bool`/float via `int()`/`float()`.
+- **Decision**: `TempoApp` takes a separate `wall_clock` (`run.py` passes `time.time`); `advanced`/`settled` accept `completed_at` for history while `started_at`/elapsed stay monotonic; `snapshot` takes `wall_now` for the calendar date only. `_as_int`, `load_plan` and `_decode` require `isinstance(value, int) and not isinstance(value, bool)` (float fields allow int/float but never bool). Schema stays at version 1; old monotonic histories read as 1970 dates (today 0, total preserved).
+- **Consequences**: Reboot no longer erases today's analytics; malformed ints are deterministic 400s or quarantines with no traceback. Reproduce with: `python -m unittest discover -s tests -t .` (55 tests, incl. wall-reboot and strict-int regressions).
+
 ## Licensing migration (agpl-final)
 
 - New versions use the Aegean License 1.1 (AL-1.1); versions up to and including `agpl-final` remain under GNU AGPL-3.0.

@@ -9,8 +9,8 @@
 - **Total Python Modules**: `16`
 - **Total Classes**: `20`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `89`
-- **Total Source Lines**: `1705`
+- **Total Class Methods**: `94`
+- **Total Source Lines**: `1809`
 
 ---
 
@@ -19,7 +19,7 @@
 ### [`run.py`](run.py)
 > *Start Tempo and print the one URL a user needs.*
 
-**Size**: `86` lines (`3468` bytes)
+**Size**: `86` lines (`3490` bytes)
 
 **Functions:**
 - `def parse_args(argv)` - *The command line: port, state file and the three phase lengths in minutes.*
@@ -51,13 +51,14 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `232` lines (`10283` bytes)
+**Size**: `240` lines (`10855` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
   - Method `.resolve(url_path)` - *The file a URL path names, or None when it escapes or does not exist.*
 - `class TempoApp` - *One session's backend: settle it against the clock, act on it, report it.*
-  - Method `.__init__(store, plan, clock)`
+  - Method `.__init__(store, plan, clock, wall_clock)`
+  - Method `._now_pair()` - *Monotonic now for the timer and wall now for history/analytics.*
   - Method `._load()` - *The stored session; a running one is paused once, when this process first reads it.*
   - Method `.status()` - *The current snapshot, persisting any phases that elapsed since the last call.*
   - Method `._rewound(state, now)` - *A run stamped after `now` lost its clock (a reboot); restart it at `now`.*
@@ -81,7 +82,7 @@
 ### [`tempo/session.py`](tempo/session.py)
 > *Session state and its transitions.*
 
-**Size**: `104` lines (`3889` bytes)
+**Size**: `109` lines (`4254` bytes)
 
 **Classes:**
 - `class SessionState` - *Where a session stands: its phase, its run clock and its finished focus count.*
@@ -92,8 +93,8 @@
 - `def remaining_seconds(state, plan, now)` - *Seconds left in the current phase, never below zero.*
 - `def started(state, now)` - *The session running from `now`; starting a running session changes nothing.*
 - `def paused(state, now)` - *The session paused, banking the elapsed run; pausing a paused one is a no-op.*
-- `def advanced(state, plan, now)` - *The next phase, from a standing start, counting a finished focus phase.*
-- `def settled(state, plan, now)` - *The state with every phase that ran out before `now` advanced past.*
+- `def advanced(state, plan, now, completed_at)` - *The next phase, from a standing start, counting a finished focus phase.*
+- `def settled(state, plan, now, completed_at)` - *The state with every phase that ran out before `now` advanced past.*
 - `def reset(state)` - *A fresh session, keeping nothing from the old one.*
 
 ---
@@ -101,17 +102,17 @@
 ### [`tempo/status.py`](tempo/status.py)
 > *The read model the UI renders.*
 
-**Size**: `54` lines (`2174` bytes)
+**Size**: `56` lines (`2272` bytes)
 
 **Functions:**
-- `def snapshot(state, plan, now)` - *A settled session as the flat payload `GET /api/status` returns.*
+- `def snapshot(state, plan, now, wall_now)` - *A settled session as the flat payload `GET /api/status` returns.*
 
 ---
 
 ### [`tempo/store.py`](tempo/store.py)
 > *Crash-safe persistence for one session.*
 
-**Size**: `144` lines (`5945` bytes)
+**Size**: `173` lines (`7277` bytes)
 
 **Classes:**
 - `class StoreError` - *A state file this build must not touch: the caller reports why and the fix.*
@@ -139,7 +140,7 @@
 ### [`tests/test_app.py`](tests/test_app.py)
 > *Unit tests for the backend contract: status, actions and static path safety.*
 
-**Size**: `144` lines (`5886` bytes)
+**Size**: `169` lines (`7163` bytes)
 
 **Classes:**
 - `class FakeClock` - *A clock the test moves by hand, so no test ever sleeps (PRINCIPLE-014 R5).*
@@ -155,6 +156,7 @@
   - Method `.test_skip_moves_on_and_reset_starts_over()`
   - Method `.test_configure_action_updates_plan_and_persists_it()`
   - Method `.test_configure_with_invalid_values_raises_value_error()`
+  - Method `.test_history_uses_wall_time_so_reboot_keeps_today()`
   - Method `.test_unknown_action_is_refused_and_leaves_the_session_alone()`
   - Method `.test_an_invalid_plan_is_refused_when_the_app_is_built()`
 - `class StaticFilesTest`
@@ -192,7 +194,7 @@
 ### [`tests/test_session.py`](tests/test_session.py)
 > *Unit tests for the phase plan, session transitions and the status read model.*
 
-**Size**: `135` lines (`6381` bytes)
+**Size**: `143` lines (`6835` bytes)
 
 **Classes:**
 - `class PhasePlanTest`
@@ -207,6 +209,7 @@
   - Method `.test_settle_carries_overshoot_into_the_new_phase()`
   - Method `.test_reset_returns_a_fresh_session()`
   - Method `.test_advanced_records_completed_focus_in_history()`
+  - Method `.test_advanced_stamps_history_with_wall_time_when_given()`
 - `class SnapshotTest`
   - Method `.test_snapshot_reports_whole_seconds_and_cycle_position()`
   - Method `.test_snapshot_includes_plan_durations_and_analytics()`
@@ -220,7 +223,7 @@
 ### [`tests/test_store.py`](tests/test_store.py)
 > *Unit tests for atomic session persistence, schema refusal and quarantine.*
 
-**Size**: `108` lines (`5044` bytes)
+**Size**: `135` lines (`6562` bytes)
 
 **Classes:**
 - `class SessionStoreTest`
@@ -231,6 +234,8 @@
   - Method `.test_wrong_typed_session_fields_are_quarantined()`
   - Method `.test_overflowing_number_is_quarantined()`
   - Method `.test_plan_persistence_and_reload()`
+  - Method `.test_non_int_plan_values_are_not_loaded()`
+  - Method `.test_bool_history_is_quarantined()`
   - Method `.test_save_leaves_no_temporary_files_behind()`
   - Method `.test_unknown_schema_is_refused_without_touching_the_file()`
   - Method `.test_corrupt_file_is_quarantined_and_replaced_by_a_fresh_session()`

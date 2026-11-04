@@ -108,6 +108,31 @@ class TempoAppTest(unittest.TestCase):
             self.app.apply("configure", {"focus_seconds": []})
         with self.assertRaises(ValueError):
             self.app.apply("configure", {"focus_seconds": True})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": 12.9})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": "30"})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"focus_seconds": 12.0})
+        with self.assertRaises(ValueError):
+            self.app.apply("configure", {"cycle_length": 2.0})
+
+    def test_history_uses_wall_time_so_reboot_keeps_today(self):
+        wall = [1700000000.0]
+        app = TempoApp(SessionStore(self.root / "wall.json"), SHORT_PLAN,
+                       self.clock, wall_clock=lambda: wall[0])
+        app.apply("toggle")
+        self.clock.now += 13
+        wall[0] += 13
+        self.assertEqual(1, app.status()["today_focus_count"])
+        rebooted = TempoApp(SessionStore(self.root / "wall.json"), SHORT_PLAN,
+                            self.clock, wall_clock=lambda: wall[0])
+        # Simulate a reboot: monotonic restarts small while wall stays on the day.
+        self.clock.now = 500.0
+        status = rebooted.status()
+        self.assertEqual(1, status["today_focus_count"])
+        self.assertEqual(10, status["today_focus_seconds"])
+        self.assertEqual(1, status["completed_focus"])
 
     def test_unknown_action_is_refused_and_leaves_the_session_alone(self):
         self.app.apply("toggle")

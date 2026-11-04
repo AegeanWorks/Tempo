@@ -66,11 +66,13 @@ def paused(state: SessionState, now: float) -> SessionState:
                    spent_seconds=elapsed_seconds(state, now))
 
 
-def advanced(state: SessionState, plan: PhasePlan, now: float) -> SessionState:
+def advanced(state: SessionState, plan: PhasePlan, now: float,
+                 completed_at: float | None = None) -> SessionState:
     """The next phase, from a standing start, counting a finished focus phase."""
     phase = plan.phase_at(state.phase_index)
     finished_focus = phase.kind == FOCUS
-    new_history = (state.history + (((now, phase.seconds),) if finished_focus else ()))[-200:]
+    stamp = completed_at if completed_at is not None else now
+    new_history = (state.history + (((stamp, phase.seconds),) if finished_focus else ()))[-200:]
     return SessionState(
         phase_index=state.phase_index + 1,
         running=state.running,
@@ -81,20 +83,23 @@ def advanced(state: SessionState, plan: PhasePlan, now: float) -> SessionState:
     )
 
 
-def settled(state: SessionState, plan: PhasePlan, now: float) -> SessionState:
+def settled(state: SessionState, plan: PhasePlan, now: float,
+              completed_at: float | None = None) -> SessionState:
     """
     The state with every phase that ran out before `now` advanced past.
 
     Overshoot carries into the new phase, so a browser that polls late lands on the same
     phase it would have reached by polling every second. The step cap bounds the work a
-    single long gap can ask for (PRINCIPLE-010).
+    single long gap can ask for (PRINCIPLE-010). `now` drives the monotonic run clock;
+    `completed_at` stamps history with wall time so analytics survive a reboot.
     """
+    stamp = completed_at if completed_at is not None else now
     current = state
     for _ in range(MAX_SETTLE_STEPS):
         if not current.running or remaining_seconds(current, plan, now) > 0:
             return current
         overshoot = elapsed_seconds(current, now) - plan.phase_at(current.phase_index).seconds
-        current = advanced(current, plan, now)
+        current = advanced(current, plan, now, completed_at=stamp)
         current = replace(current, started_at=now - max(0.0, overshoot))
     return current
 

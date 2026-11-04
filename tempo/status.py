@@ -15,12 +15,14 @@ from tempo.phases import PhasePlan
 from tempo.session import SessionState, elapsed_seconds, remaining_seconds
 
 
-def snapshot(state: SessionState, plan: PhasePlan, now: float) -> Dict[str, object]:
+def snapshot(state: SessionState, plan: PhasePlan, now: float,
+             wall_now: float | None = None) -> Dict[str, object]:
     """A settled session as the flat payload `GET /api/status` returns."""
     phase = plan.phase_at(state.phase_index)
     remaining = remaining_seconds(state, plan, now)
+    wall = wall_now if wall_now is not None else now
     try:
-        today = datetime.fromtimestamp(now).date()
+        today = datetime.fromtimestamp(wall).date()
         today_count = 0
         today_seconds = 0
         for timestamp, seconds in state.history:

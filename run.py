@@ -60,7 +60,7 @@ def main(argv=None) -> int:
         print("Fix: pass positive --focus, --short-break and --long-break minutes and "
               "a --cycle of 1 or more.", file=sys.stderr)
         return 2
-    app = TempoApp(SessionStore(args.state), plan, time.monotonic)
+    app = TempoApp(SessionStore(args.state), plan, time.monotonic, wall_clock=time.time)
     try:
         server = build_server(app, args.port, WEB_ROOT)
     except OSError as error:

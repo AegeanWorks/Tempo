@@ -62,6 +62,33 @@ class SessionStoreTest(unittest.TestCase):
         self.assertEqual(state, self.store.load())
         self.assertEqual(plan, self.store.load_plan())
 
+    def test_non_int_plan_values_are_not_loaded(self):
+        from tempo.phases import PhasePlan
+        self.store.path.parent.mkdir(parents=True)
+        self.store.path.write_text(json.dumps({"schema": SCHEMA, "session": {
+            "phase_index": 0, "running": False, "started_at": None,
+            "spent_seconds": 0, "completed_focus": 0, "history": []},
+            "plan": {"focus_seconds": True, "short_break_seconds": 300,
+                     "long_break_seconds": 900, "cycle_length": 5}}),
+            encoding="utf-8")
+        self.assertIsNone(self.store.load_plan())
+        self.store.path.write_text(json.dumps({"schema": SCHEMA, "session": {
+            "phase_index": 0, "running": False, "started_at": None,
+            "spent_seconds": 0, "completed_focus": 0, "history": []},
+            "plan": {"focus_seconds": 12.5, "short_break_seconds": 300,
+                     "long_break_seconds": 900, "cycle_length": 5}}),
+            encoding="utf-8")
+        self.assertIsNone(self.store.load_plan())
+
+    def test_bool_history_is_quarantined(self):
+        self.store.path.parent.mkdir(parents=True)
+        self.store.path.write_text(json.dumps({"schema": SCHEMA, "session": {
+            "phase_index": 0, "running": False, "started_at": None,
+            "spent_seconds": 0, "completed_focus": 1,
+            "history": [[1700000000.0, True]]}}), encoding="utf-8")
+        self.assertEqual(SessionState.initial(), self.store.load())
+        self.assertTrue(self.store.quarantine.exists())
+
     def test_save_leaves_no_temporary_files_behind(self):
         self.store.save(SessionState.initial())
         leftovers = [path.name for path in self.store.path.parent.iterdir()

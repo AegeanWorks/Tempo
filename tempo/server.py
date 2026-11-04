@@ -59,12 +59,21 @@ class TempoApp:
     ACTIONS = ("toggle", "skip", "reset", "configure")
 
     def __init__(self, store: SessionStore, plan: PhasePlan,
-                 clock: Callable[[], float]):
+                 clock: Callable[[], float],
+                 wall_clock: Callable[[], float] | None = None):
         self.store = store
         saved_plan = self.store.load_plan()
         self.plan = saved_plan if saved_plan is not None else plan.validated()
         self.clock = clock
+        # Wall time stamps history so analytics survive a reboot; the monotonic
+        # clock drives elapsed time only. When no wall clock is given the timer
+        # clock is reused, preserving the old single-clock behaviour for tests.
+        self.wall = wall_clock if wall_clock is not None else clock
         self._restored = False
+
+    def _now_pair(self) -> Tuple[float, float]:
+        """Monotonic now for the timer and wall now for history/analytics."""
+        return self.clock(), self.wall()
 
     def _load(self) -> SessionState:
         """The stored session; a running one is paused once, when this process first reads it."""
@@ -79,12 +88,13 @@ class TempoApp:
 
     def status(self) -> Dict[str, object]:
         """The current snapshot, persisting any phases that elapsed since the last call."""
-        now = self.clock()
+        now, wall_now = self._now_pair()
         stored = self._load()
-        current = settled(self._rewound(stored, now), self.plan, now)
+        current = settled(self._rewound(stored, now), self.plan, now,
+                          completed_at=wall_now)
         if current != stored:
             self.store.save(current, self.plan)
-        return snapshot(current, self.plan, now)
+        return snapshot(current, self.plan, now, wall_now=wall_now)
 
     @staticmethod
     def _rewound(state: SessionState, now: float) -> SessionState:
@@ -98,24 +108,22 @@ class TempoApp:
         if action not in self.ACTIONS:
             raise ValueError(f"unknown action {action!r}; expected one of "
                              f"{', '.join(self.ACTIONS)}")
-        now = self.clock()
-        current = settled(self._rewound(self._load(), now), self.plan, now)
+        now, wall_now = self._now_pair()
+        current = settled(self._rewound(self._load(), now), self.plan, now,
+                          completed_at=wall_now)
         if action == "toggle":
             current = paused(current, now) if current.running else started(current, now)
         elif action == "skip":
-            current = advanced(current, self.plan, now)
+            current = advanced(current, self.plan, now, completed_at=wall_now)
         elif action == "reset":
             current = reset(current)
         elif action == "configure":
             cfg = params or {}
 
             def _as_int(value: object, field: str) -> int:
-                if isinstance(value, bool):
-                    raise ValueError(f"{field} must be an int, not a bool")
-                try:
-                    return int(value)  # type: ignore[arg-type]
-                except (ValueError, TypeError) as error:
-                    raise ValueError(f"{field} must be an integer: {error}") from error
+                if isinstance(value, bool) or not isinstance(value, int):
+                    raise ValueError(f"{field} must be an int, not {type(value).__name__}")
+                return value
 
             try:
                 focus = _as_int(cfg["focus_seconds"], "focus_seconds") if "focus_seconds" in cfg and cfg["focus_seconds"] is not None else self.plan.focus_seconds
@@ -127,7 +135,7 @@ class TempoApp:
             from tempo.phases import PhasePlan
             self.plan = PhasePlan(focus, short_b, long_b, cycle_l).validated()
         self.store.save(current, self.plan)
-        return snapshot(current, self.plan, now)
+        return snapshot(current, self.plan, now, wall_now=wall_now)
 
 
 class TempoHandler(BaseHTTPRequestHandler):
