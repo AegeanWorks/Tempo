@@ -68,6 +68,7 @@ tempo/
 │   ├── test_store.py         <- round trip, schema refusal, quarantine
 │   ├── test_app.py           <- backend contract and static path safety
 │   ├── test_http.py          <- real socket: endpoints, assets, 400s and 404s
+│   ├── test_run.py           <- flags, plan validation, exit codes
 │   └── test_ui_inventory.py  <- inventory parser and handler coverage
 ├── .gitignore                <- transient state and caches excluded
 ├── README.md
