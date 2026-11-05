@@ -9,8 +9,8 @@
 - **Total Python Modules**: `17`
 - **Total Classes**: `22`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `99`
-- **Total Source Lines**: `1860`
+- **Total Class Methods**: `100`
+- **Total Source Lines**: `1879`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `243` lines (`11044` bytes)
+**Size**: `251` lines (`11354` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -71,7 +71,7 @@
   - Method `._json(status, payload)`
   - Method `._respond(status, content_type, body, cache)`
   - Method `.log_message(format, *args)` - *Silent by default; `run.py` prints the one line a user needs.*
-- `class TempoServer` - *An HTTP server that treats a dropped connection as routine, not as an error.*
+- `class TempoServer` - *Serve each connection on its own thread.*
   - Method `.handle_error(request, client_address)` - *Stay silent when the client simply went away; report anything else.*
 
 **Functions:**
@@ -169,7 +169,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `180` lines (`7950` bytes)
+**Size**: `191` lines (`8563` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -182,6 +182,7 @@
   - Method `.test_configure_action_over_http()`
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
+  - Method `.test_a_stalled_keep_alive_connection_does_not_block_other_requests()`
   - Method `.test_unknown_paths_answer_404()`
   - Method `.test_a_post_to_an_unknown_path_closes_the_connection()`
   - Method `.test_a_configure_with_the_wrong_types_answers_400()`
