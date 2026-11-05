@@ -18,6 +18,9 @@ every fourth break is a long one.
   ```bash
   python run.py            # then open http://127.0.0.1:8765
   ```
+  On Windows, double-click `run.cmd`: it starts the server, waits until it
+  answers, and opens the page for you. Command-line arguments (including
+  `--port` and `--state`) pass through to `run.py`.
 - **Canonical Regression Shield Gate**:
   ```bash
   python -m unittest discover -s tests -t .
@@ -46,6 +49,7 @@ every fourth break is a long one.
 ```text
 tempo/
 ├── run.py                    <- entry point: flags, port, phase lengths
+├── run.cmd                   <- one-click run on Windows: server + browser
 ├── tempo/
 │   ├── __init__.py           <- package marker
 │   ├── phases.py             <- the phase sequence and its durations (pure)
