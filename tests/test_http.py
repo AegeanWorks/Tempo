@@ -106,11 +106,22 @@ class HttpTest(unittest.TestCase):
             probe.setsockopt(socket.SOL_SOCKET, socket.SO_LINGER,
                              struct.pack("ii", 1, 0))
             probe.close()
-            # The server is single threaded, so this request only completes after it has
-            # finished dealing with the reset connection.
+            # The server answers on its own thread, so this request does not
+            # wait for the reset connection to time out.
             status, _, _ = self.get("/api/status")
         self.assertEqual(200, status)
         self.assertNotIn("Traceback", captured.getvalue())
+
+    def test_a_stalled_keep_alive_connection_does_not_block_other_requests(self):
+        stalled = socket.create_connection(
+            ("127.0.0.1", self.server.server_address[1]), timeout=TIMEOUT)
+        self.addCleanup(stalled.close)
+        # An unfinished request line: the server holds this connection open
+        # (up to its socket timeout) waiting for the rest of the headers.
+        stalled.sendall(b"GET /api/status HTTP/1.1\r\nHost: tempo\r\n")
+        # Any other client must still be answered promptly on its own thread.
+        status, _, _ = self.get("/api/status")
+        self.assertEqual(200, status)
 
     def test_unknown_paths_answer_404(self):
         for method in ("GET", "POST"):

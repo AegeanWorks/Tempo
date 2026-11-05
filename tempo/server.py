@@ -11,7 +11,7 @@ PRINCIPLE-009, PRINCIPLE-010, PRINCIPLE-011, PRINCIPLE-013.
 import json
 import sys
 from dataclasses import dataclass, replace
-from http.server import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Callable, Dict, Optional, Tuple
 from urllib.parse import urlparse
@@ -225,8 +225,16 @@ class TempoHandler(BaseHTTPRequestHandler):
         """Silent by default; `run.py` prints the one line a user needs."""
 
 
-class TempoServer(HTTPServer):
-    """An HTTP server that treats a dropped connection as routine, not as an error."""
+class TempoServer(ThreadingHTTPServer):
+    """Serve each connection on its own thread.
+
+    The single-threaded base holds every later request while one keep-alive
+    connection idles (up to the 10 s socket timeout): the page then loads
+    slowly and button clicks visibly do nothing. Threads are daemon so tests
+    and Ctrl+C never wait on an idle connection (PRINCIPLE-010 R6).
+    """
+
+    daemon_threads = True
 
     def handle_error(self, request, client_address) -> None:
         """Stay silent when the client simply went away; report anything else."""
