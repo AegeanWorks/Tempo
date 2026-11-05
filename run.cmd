@@ -4,6 +4,15 @@ rem Starts the server (python run.py, same defaults) and opens the page
 rem in your default browser once the server answers. Any arguments are
 rem passed through to run.py, including --port and --state.
 setlocal
+rem Fail fast with a readable message when Python is missing instead of
+rem flashing a server window that dies and a 30-second wait for nothing.
+python --version >nul 2>nul
+if errorlevel 1 (
+  echo Python was not found. Install Python 3.9+ from https://www.python.org/downloads/
+  echo ^(tick "Add python.exe to PATH" during install^), then double-click run.cmd again.
+  pause
+  exit /b 1
+)
 set PORT=8765
 if not "%~1"=="" (
   for %%a in (%*) do (
