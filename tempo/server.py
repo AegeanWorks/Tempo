@@ -160,8 +160,11 @@ class TempoHandler(BaseHTTPRequestHandler):
             self._json(404, {"error": "not found", "path": route})
             return
         body = target.read_bytes()
+        # Never cache the page or its assets: this is a localhost app where a
+        # fresh HTML document paired with a stale cached app.js leaves every
+        # button silently dead, and caching buys nothing on loopback.
         self._respond(200, CONTENT_TYPES.get(target.suffix, "application/octet-stream"),
-                      body, cache=route != "/" and not route.endswith(".html"))
+                      body, cache=False)
 
     def do_POST(self) -> None:  # noqa: N802 - stdlib handler contract
         if urlparse(self.path).path != "/api/action":

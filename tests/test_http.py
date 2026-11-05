@@ -70,6 +70,11 @@ class HttpTest(unittest.TestCase):
             self.assertIn(expected, headers["Content-Type"])
             self.assertTrue(body)
 
+    def test_nothing_is_cacheable_so_stale_assets_cannot_kill_buttons(self):
+        for path in ("/", "/app.js", "/theme.css", "/api/status"):
+            _, headers, _ = self.get(path)
+            self.assertEqual("no-store", headers["Cache-Control"], path)
+
     def test_configure_action_over_http(self):
         status, updated = self.post("/api/action", {
             "action": "configure",
