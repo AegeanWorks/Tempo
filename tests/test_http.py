@@ -75,6 +75,11 @@ class HttpTest(unittest.TestCase):
             _, headers, _ = self.get(path)
             self.assertEqual("no-store", headers["Cache-Control"], path)
 
+    def test_favicon_answers_empty_instead_of_404(self):
+        status, _, body = self.get("/favicon.ico")
+        self.assertEqual(204, status)
+        self.assertEqual(b"", body)
+
     def test_configure_action_over_http(self):
         status, updated = self.post("/api/action", {
             "action": "configure",

@@ -155,6 +155,11 @@ class TempoHandler(BaseHTTPRequestHandler):
         if route == "/api/status":
             self._guarded(lambda: (200, self.app.status()))
             return
+        if route == "/favicon.ico":
+            # Browsers request this unprompted on every load; answer empty
+            # instead of 404 so the console stays clean for real errors.
+            self._respond(204, "image/x-icon", b"", cache=True)
+            return
         target = self.files.resolve(route)
         if target is None:
             self._json(404, {"error": "not found", "path": route})
