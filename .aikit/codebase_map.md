@@ -9,8 +9,8 @@
 - **Total Python Modules**: `17`
 - **Total Classes**: `22`
 - **Total Top-Level Functions**: `31`
-- **Total Class Methods**: `100`
-- **Total Source Lines**: `1879`
+- **Total Class Methods**: `101`
+- **Total Source Lines**: `1889`
 
 ---
 
@@ -51,7 +51,7 @@
 ### [`tempo/server.py`](tempo/server.py)
 > *The HTTP layer: a stdlib server that serves web/ and three JSON endpoints.*
 
-**Size**: `251` lines (`11354` bytes)
+**Size**: `256` lines (`11621` bytes)
 
 **Classes:**
 - `class StaticFiles` - *Resolves a URL path to a file inside one directory, and never outside it.*
@@ -169,7 +169,7 @@
 ### [`tests/test_http.py`](tests/test_http.py)
 > *Integration tests over a real socket: the JSON endpoints and the served page.*
 
-**Size**: `191` lines (`8563` bytes)
+**Size**: `196` lines (`8746` bytes)
 
 **Classes:**
 - `class HttpTest`
@@ -179,6 +179,7 @@
   - Method `.test_status_and_actions_round_trip_over_http()`
   - Method `.test_the_page_and_its_assets_are_served_with_their_types()`
   - Method `.test_nothing_is_cacheable_so_stale_assets_cannot_kill_buttons()`
+  - Method `.test_favicon_answers_empty_instead_of_404()`
   - Method `.test_configure_action_over_http()`
   - Method `.test_an_unknown_action_answers_400_with_a_reason()`
   - Method `.test_a_client_that_drops_mid_request_is_not_an_error()`
